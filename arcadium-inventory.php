@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Arcadium Inventory by Boileau & Co.
- * Plugin URI: https://github.com/yourusername/arcadium-inventory
+ * Plugin URI: https://github.com/boileau-co/arcadium-inventory
  * Description: A modular JavaScript application for displaying vehicle inventory with XML feed integration and advanced filtering.
  * Version: 1.0.0
  * Author: Boileau & Co.
@@ -13,9 +13,9 @@
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  *
- * GitHub Plugin URI: yourusername/arcadium-inventory
- * GitHub Branch: main
- * Primary Branch: main
+ * GitHub Plugin URI: boileau-co/arcadium-inventory
+ * GitHub Branch: master
+ * Primary Branch: master
  */
 
 // Exit if accessed directly
