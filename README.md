@@ -1,123 +1,146 @@
-# Arcadium Inventory by Boileau & Co.
+# Arcadium Inventory
 
-A modular JavaScript application for displaying vehicle inventory. Designed for future conversion to a WordPress plugin.
+A WordPress plugin for displaying vehicle inventory with XML feed integration, advanced filtering, and automatic updates via GitHub.
 
-## Project Structure
+**By Boileau & Co.**
 
-```
-arcadium-inventory/
-├── index.html          # Main HTML file
-├── css/
-│   └── styles.css      # All styles (CSS custom properties for theming)
-├── js/
-│   ├── config.js       # Configuration & global namespace
-│   ├── formatters.js   # Price, odometer formatting utilities
-│   ├── filters.js      # Filter logic
-│   ├── gallery.js      # Image gallery component
-│   ├── renderer.js     # HTML rendering
-│   └── app.js          # Main application entry point
-├── data/
-│   └── inventory.json  # Inventory data (parsed from XML)
-└── README.md
-```
+## Features
 
-## Quick Start
+- 🚗 Display vehicle inventory with advanced filtering
+- 📡 XML feed integration with intelligent caching
+- 🔄 Automatic updates via GitHub Releases
+- 🎨 Fully customizable with CSS custom properties
+- 📱 Responsive design
+- ⚡ Performance optimized with WordPress transients
+- 🔍 Search, filter by condition, make, and image availability
 
-1. Open the project folder in VS Code
-2. Use Live Server extension (or similar) to serve the files
-3. Open `index.html` in browser
+## Installation
 
-Or simply open `index.html` directly - but note that loading JSON via fetch requires a local server due to CORS.
+### Manual Installation
 
-## Architecture
+1. Download or clone this repository
+2. Upload the `arcadium-inventory` folder to `/wp-content/plugins/`
+3. Activate the plugin through the **Plugins** menu in WordPress
+4. Go to **Settings → Arcadium Inventory** to configure
 
-The app uses a simple namespace pattern (`ARC.*`) to avoid global conflicts:
+### GitHub Updater (for Automatic Updates)
 
-- **ARC.config** - Configuration settings
-- **ARC.state** - Application state
-- **ARC.formatters** - Utility functions
-- **ARC.filters** - Filter logic
-- **ARC.gallery** - Image gallery
-- **ARC.renderer** - HTML rendering
-- **ARC.app** - Main application logic
+1. Install [GitHub Updater](https://github.com/afragen/github-updater) plugin
+2. Activate GitHub Updater
+3. Your plugin will automatically check for updates from this repository
 
 ## Configuration
 
-Edit `js/config.js` to change settings:
+### Basic Setup
 
-```javascript
-ARC.config = {
-  dataSource: 'json',
-  dataUrl: 'data/inventory.json',
-  containerSelector: '#arc-inventory',
-  // ...
-};
+1. Navigate to **Settings → Arcadium Inventory**
+2. Enter your **XML Feed URL**
+3. Set **Cache Duration** (default: 3600 seconds / 1 hour)
+4. Configure **Items Per Page** (default: 12)
+5. Click **Save Settings**
+
+### Display the Inventory
+
+Add this shortcode to any page or post:
+
+```
+[arc_inventory]
 ```
 
-## WordPress Plugin Conversion Notes
+**Optional parameters:**
+```
+[arc_inventory container_class="my-custom-class"]
+```
 
-When converting to WordPress:
+## GitHub Updater Setup
 
-### 1. Suggested Plugin Structure
+To enable automatic updates via GitHub releases:
+
+### Update Version Number
+
+When ready to release, update the version in `arcadium-inventory.php`:
+
+```php
+* Version: 1.0.1
+define('ARC_INVENTORY_VERSION', '1.0.1');
+```
+
+### Create a GitHub Release
+
+1. Commit and push your changes
+2. Go to your repository on GitHub
+3. Click **Releases** → **Create a new release**
+4. **Tag version:** `1.0.1` (must match plugin version)
+5. **Release title:** `Version 1.0.1`
+6. Describe the changes
+7. Click **Publish release**
+
+WordPress sites with GitHub Updater will automatically detect and offer the update!
+
+## Development & Testing
+
+### Local Testing (No WordPress Required)
+
+For development and testing the frontend JavaScript app:
+
+1. Open `test-local.html` in VS Code
+2. Right-click → **Open with Live Preview** (or use Live Server extension)
+3. Test all features: filtering, search, pagination, gallery
+
+The test page uses sample data from `assets/data/inventory.json`.
+
+### Project Structure
+
 ```
 arcadium-inventory/
-├── arc-inventory.php        # Main plugin file
+├── arcadium-inventory.php      # Main plugin file
 ├── includes/
-│   ├── class-arc-admin.php  # Admin settings page
-│   └── class-arc-public.php # Frontend shortcode
+│   ├── class-arc-admin.php     # Admin settings page
+│   ├── class-arc-public.php    # Frontend shortcode & asset loading
+│   └── class-arc-api.php       # REST API for XML feed
 ├── assets/
-│   ├── css/styles.css
-│   └── js/ (all JS files)
-└── templates/
-    └── inventory-grid.php
+│   ├── css/
+│   │   ├── styles.css          # Frontend styles
+│   │   └── admin.css           # Admin panel styles
+│   └── js/
+│       ├── config.js           # Configuration & namespace
+│       ├── formatters.js       # Utility functions
+│       ├── filters.js          # Filter logic
+│       ├── gallery.js          # Image gallery component
+│       ├── renderer.js         # HTML rendering
+│       └── app.js              # Main application
+├── test-local.html             # Standalone test page
+└── README.md                   # This file
 ```
 
-### 2. Enqueue Scripts
-```php
-wp_enqueue_style('arc-styles', plugin_dir_url(__FILE__) . 'assets/css/styles.css');
-wp_enqueue_script('arc-config', plugin_dir_url(__FILE__) . 'assets/js/config.js');
-// ... enqueue other scripts in dependency order
+### REST API Endpoint
 
-wp_localize_script('arc-config', 'ARC_Config', array(
-    'dataUrl' => rest_url('wmi/v1/inventory'),
-    'nonce' => wp_create_nonce('wp_rest')
-));
+The plugin creates a REST API endpoint:
+
+```
+/wp-json/arc/v1/inventory
 ```
 
-### 3. Shortcode
-```php
-function arc_inventory_shortcode($atts) {
-    return '<div id="arc-inventory" class="arc-inventory"></div>';
-}
-add_shortcode('arc_inventory', 'arc_inventory_shortcode');
-```
+This endpoint fetches and parses your XML feed, caches the results, and returns JSON for the JavaScript app.
 
-### 4. REST API Endpoint (for fetching XML feed)
-```php
-add_action('rest_api_init', function() {
-    register_rest_route('wmi/v1', '/inventory', array(
-        'methods' => 'GET',
-        'callback' => 'arc_get_inventory',
-        'permission_callback' => '__return_true'
-    ));
-});
+## Customization
 
-function arc_get_inventory() {
-    $xml_url = get_option('arc_xml_feed_url');
-    // Fetch XML, parse, cache with transients, return JSON
+### Styling
+
+Override CSS custom properties in your theme:
+
+```css
+:root {
+  --arc-primary-color: #0066cc;
+  --arc-border-radius: 8px;
+  --arc-spacing: 1rem;
+  /* See assets/css/styles.css for all available variables */
 }
 ```
 
-### 5. Admin Settings to Add
-- XML Feed URL
-- Cache duration (use transients)
-- Items per page
-- Default filter values
-- Style customization options
+### Data Format
 
-## Data Format
-
-Each inventory item:
+Expected inventory item structure:
 
 ```json
 {
@@ -128,7 +151,7 @@ Each inventory item:
   "model": "MV607 SBA",
   "condition": "Used",
   "odometer": "170682",
-  "ourPrice": "36900.000000000",
+  "ourPrice": "36900.00",
   "category": "TRK",
   "type": "USED TRUCK",
   "color": "White",
@@ -139,6 +162,39 @@ Each inventory item:
 }
 ```
 
+### Clearing Cache
+
+- **Automatic:** Cache clears when settings are saved
+- **Manual:** Use the "Clear Cache Now" button in settings
+- **Programmatic:** `delete_transient('arc_inventory_data')`
+
+## Requirements
+
+- **WordPress:** 5.8 or higher
+- **PHP:** 7.4 or higher
+- **XML Feed:** Valid inventory XML feed URL
+
 ## Browser Support
 
-Modern browsers only (Chrome, Firefox, Safari, Edge). No IE11.
+Modern browsers (Chrome, Firefox, Safari, Edge). No IE11 support.
+
+## Support & Issues
+
+For bug reports and feature requests, please use the [GitHub issue tracker](https://github.com/boileau-co/arcadium-inventory/issues).
+
+## License
+
+GPL v2 or later. See [LICENSE](https://www.gnu.org/licenses/gpl-2.0.html).
+
+## Changelog
+
+### 1.0.0 (Initial Release)
+- WordPress plugin structure
+- XML feed integration with caching
+- Admin settings page
+- Shortcode support `[arc_inventory]`
+- REST API endpoint
+- GitHub Updater support
+- Responsive design
+- Search and filtering
+- Image gallery
