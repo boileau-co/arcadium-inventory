@@ -1,0 +1,24 @@
+/**
+ * Admin Styles for Arcadium Inventory
+ */
+
+.arc-admin-settings {
+    max-width: 800px;
+}
+
+.arc-admin-settings h2 {
+    margin-top: 2em;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 0.5em;
+}
+
+.arc-admin-settings code {
+    background: #f0f0f0;
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+}
+
+.arc-admin-settings .notice {
+    margin: 1em 0;
+}
