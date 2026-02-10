@@ -19,15 +19,19 @@
 }
 
 /**
- * Base Container
+ * Base Container & Box Sizing
  */
-.arc-inventory {
-  box-sizing: border-box;
-}
-
+.arc-inventory,
 .arc-inventory *,
 .arc-inventory *::before,
 .arc-inventory *::after {
+  box-sizing: border-box;
+}
+
+/* Explicit box-sizing for form elements */
+.arc-inventory input,
+.arc-inventory select,
+.arc-inventory button {
   box-sizing: border-box;
 }
 
