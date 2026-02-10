@@ -88,14 +88,12 @@
 }
 
 .arc-filter-group {
-  min-width: 160px;
-  flex: 0 1 auto;
+  min-width: 140px;
 }
 
 .arc-filter-group--search {
-  flex: 1 1 auto;
+  flex: 1;
   min-width: 200px;
-  max-width: 400px;
 }
 
 .arc-filter-label {
