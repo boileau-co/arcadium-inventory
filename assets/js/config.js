@@ -26,8 +26,7 @@ ARC.config = {
   defaultFilters: {
     search: '',
     condition: 'all',
-    make: 'all',
-    images: 'all'
+    make: 'all'
   }
 };
 
@@ -44,7 +43,7 @@ ARC.state = {
   filteredInventory: [],
   filters: { ...ARC.config.defaultFilters },
   imageIndices: {},
-  stats: { total: 0, new: 0, used: 0, withImages: 0 },
+  stats: { total: 0, new: 0, used: 0 },
   makes: [],
   isLoading: true,
   error: null

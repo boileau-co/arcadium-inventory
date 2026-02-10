@@ -66,7 +66,6 @@ ARC.renderer = {
           '<div class="arc-stats">' +
             '<span class="arc-stat-badge arc-stat-badge--new">' + state.stats.new + ' New</span>' +
             '<span class="arc-stat-badge arc-stat-badge--used">' + state.stats.used + ' Used</span>' +
-            '<span class="arc-stat-badge arc-stat-badge--photos">' + state.stats.withImages + ' w/ Photos</span>' +
           '</div>' +
         '</div>' +
         '<div class="arc-filters">' +
@@ -88,14 +87,6 @@ ARC.renderer = {
           '<div class="arc-filter-group">' +
             '<label class="arc-filter-label">Make</label>' +
             '<select class="arc-filter-select" data-filter="make">' + makesOptions + '</select>' +
-          '</div>' +
-          '<div class="arc-filter-group">' +
-            '<label class="arc-filter-label">Images</label>' +
-            '<select class="arc-filter-select" data-filter="images">' +
-              '<option value="all"' + (filters.images === 'all' ? ' selected' : '') + '>All Vehicles</option>' +
-              '<option value="with"' + (filters.images === 'with' ? ' selected' : '') + '>Has Images</option>' +
-              '<option value="without"' + (filters.images === 'without' ? ' selected' : '') + '>No Images</option>' +
-            '</select>' +
           '</div>' +
           clearBtn +
         '</div>' +

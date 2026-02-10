@@ -32,14 +32,7 @@ ARC.filters = {
       if (filters.make !== 'all' && item.make.toUpperCase() !== filters.make.toUpperCase()) {
         return false;
       }
-      
-      // Images filter
-      if (filters.images !== 'all') {
-        var hasImages = item.images && item.images.length > 0;
-        if (filters.images === 'with' && !hasImages) return false;
-        if (filters.images === 'without' && hasImages) return false;
-      }
-      
+
       return true;
     });
   },
@@ -52,8 +45,7 @@ ARC.filters = {
     return (
       filters.search !== defaults.search ||
       filters.condition !== defaults.condition ||
-      filters.make !== defaults.make ||
-      filters.images !== defaults.images
+      filters.make !== defaults.make
     );
   },
   
@@ -84,8 +76,7 @@ ARC.filters = {
     return {
       total: inventory.length,
       new: inventory.filter(function(i) { return i.condition === 'New'; }).length,
-      used: inventory.filter(function(i) { return i.condition === 'Used'; }).length,
-      withImages: inventory.filter(function(i) { return i.images && i.images.length > 0; }).length
+      used: inventory.filter(function(i) { return i.condition === 'Used'; }).length
     };
   }
   
