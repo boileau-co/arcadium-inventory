@@ -49,11 +49,13 @@ ARC.renderer = {
       makesOptions += '<option value="' + esc(make) + '"' + selected + '>' + esc(make) + '</option>';
     });
     
-    var clearBtn = hasActiveFilters ? 
-      '<button class="arc-btn-clear" data-action="clear-filters">' +
-        '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>' +
-        'Clear' +
-      '</button>' : '';
+    var clearBtn = hasActiveFilters ?
+      '<div class="arc-filter-group">' +
+        '<button class="arc-btn-clear" data-action="clear-filters">' +
+          '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>' +
+          'Clear' +
+        '</button>' +
+      '</div>' : '';
     
     return '' +
     '<div class="arc-header">' +
