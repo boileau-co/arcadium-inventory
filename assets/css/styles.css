@@ -1,53 +1,42 @@
 /**
- * ARC Inventory Viewer Styles
- * 
- * Uses CSS custom properties for easy WordPress theme integration.
+ * ARC Inventory - Minimal Structural Styles
+ *
+ * Provides only essential layout and functional styles.
+ * Inherits colors, typography, and spacing from WordPress theme.
+ *
+ * Override these CSS custom properties in your theme for customization.
  */
 
 :root {
-  --arc-primary: #2563eb;
-  --arc-success: #10b981;
-  --arc-warning: #f59e0b;
-  --arc-danger: #ef4444;
-  
-  --arc-gray-50: #f8fafc;
-  --arc-gray-100: #f1f5f9;
-  --arc-gray-200: #e2e8f0;
-  --arc-gray-300: #cbd5e1;
-  --arc-gray-400: #94a3b8;
-  --arc-gray-500: #64748b;
-  --arc-gray-600: #475569;
-  --arc-gray-700: #334155;
-  --arc-gray-800: #1e293b;
-  --arc-gray-900: #0f172a;
-  
-  --arc-radius: 0.5rem;
-  --arc-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  --arc-shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+  /* Structural spacing - adjust to match your theme */
+  --arc-container-padding: 1rem;
+  --arc-grid-gap: 1.25rem;
+  --arc-card-padding: 1rem;
+
+  /* Functional elements */
+  --arc-gallery-height: 200px;
+  --arc-border-radius: 4px; /* Matches your site's 4px radius */
 }
 
-/* Base */
+/**
+ * Base Container
+ */
 .arc-inventory {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  color: var(--arc-gray-800);
-  line-height: 1.5;
-  background: var(--arc-gray-50);
-  min-height: 100vh;
-}
-
-.arc-inventory *, .arc-inventory *::before, .arc-inventory *::after {
   box-sizing: border-box;
 }
 
-/* Header */
+.arc-inventory *,
+.arc-inventory *::before,
+.arc-inventory *::after {
+  box-sizing: border-box;
+}
+
+/**
+ * Header & Controls
+ */
 .arc-header {
-  background: white;
-  border-bottom: 1px solid var(--arc-gray-200);
-  padding: 1rem;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: var(--arc-shadow);
+  padding: var(--arc-container-padding);
+  margin-bottom: var(--arc-container-padding);
 }
 
 .arc-header-inner {
@@ -65,18 +54,16 @@
 }
 
 .arc-title {
-  font-size: 1.5rem;
-  font-weight: 700;
   margin: 0;
 }
 
 .arc-subtitle {
-  font-size: 0.875rem;
-  color: var(--arc-gray-500);
   margin: 0.25rem 0 0 0;
 }
 
-/* Stats */
+/**
+ * Stats
+ */
 .arc-stats {
   display: flex;
   gap: 0.5rem;
@@ -90,22 +77,9 @@
   font-weight: 600;
 }
 
-.arc-stat-badge--new {
-  background: #d1fae5;
-  color: #047857;
-}
-
-.arc-stat-badge--used {
-  background: #fef3c7;
-  color: #b45309;
-}
-
-.arc-stat-badge--photos {
-  background: #dbeafe;
-  color: #1d4ed8;
-}
-
-/* Filters */
+/**
+ * Filters
+ */
 .arc-filters {
   display: flex;
   flex-wrap: wrap;
@@ -126,7 +100,6 @@
   display: block;
   font-size: 0.75rem;
   font-weight: 500;
-  color: var(--arc-gray-500);
   margin-bottom: 0.25rem;
 }
 
@@ -134,18 +107,8 @@
 .arc-filter-select {
   width: 100%;
   padding: 0.5rem 0.75rem;
-  border: 1px solid var(--arc-gray-200);
-  border-radius: var(--arc-radius);
   font-size: 0.875rem;
-  background: white;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-
-.arc-filter-input:focus,
-.arc-filter-select:focus {
-  outline: none;
-  border-color: var(--arc-primary);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  border-radius: var(--arc-border-radius);
 }
 
 .arc-search-wrapper {
@@ -159,7 +122,7 @@
   transform: translateY(-50%);
   width: 1rem;
   height: 1rem;
-  color: var(--arc-gray-400);
+  pointer-events: none;
 }
 
 .arc-search-wrapper .arc-filter-input {
@@ -172,16 +135,10 @@
   gap: 0.25rem;
   padding: 0.5rem 0.75rem;
   font-size: 0.875rem;
-  color: var(--arc-gray-600);
   background: transparent;
   border: none;
-  border-radius: var(--arc-radius);
+  border-radius: var(--arc-border-radius);
   cursor: pointer;
-  transition: background 0.15s;
-}
-
-.arc-btn-clear:hover {
-  background: var(--arc-gray-100);
 }
 
 .arc-btn-clear svg {
@@ -189,18 +146,19 @@
   height: 1rem;
 }
 
-/* Content */
+/**
+ * Content Grid
+ */
 .arc-content {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 1.5rem 1rem;
+  padding: 0 var(--arc-container-padding);
 }
 
-/* Grid */
 .arc-grid {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
-  gap: 1.25rem;
+  gap: var(--arc-grid-gap);
 }
 
 @media (min-width: 640px) {
@@ -215,38 +173,31 @@
   .arc-grid { grid-template-columns: repeat(4, 1fr); }
 }
 
-/* Card */
+/**
+ * Card Structure
+ */
 .arc-card {
-  background: white;
-  border-radius: var(--arc-radius);
-  border: 1px solid var(--arc-gray-200);
+  border-radius: var(--arc-border-radius);
   overflow: hidden;
-  box-shadow: var(--arc-shadow);
-  transition: box-shadow 0.3s, border-color 0.3s;
+  display: flex;
+  flex-direction: column;
 }
 
-.arc-card:hover {
-  box-shadow: var(--arc-shadow-lg);
-  border-color: var(--arc-gray-300);
-}
-
-/* Gallery */
+/**
+ * Gallery
+ */
 .arc-gallery {
   position: relative;
-  height: 200px;
-  background: var(--arc-gray-900);
+  height: var(--arc-gallery-height);
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .arc-gallery-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s;
-}
-
-.arc-card:hover .arc-gallery-image {
-  transform: scale(1.05);
+  display: block;
 }
 
 .arc-gallery-placeholder {
@@ -255,18 +206,16 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  background: linear-gradient(135deg, var(--arc-gray-100), var(--arc-gray-200));
-  color: var(--arc-gray-400);
 }
 
 .arc-gallery-placeholder svg {
   width: 3rem;
   height: 3rem;
   margin-bottom: 0.5rem;
-  opacity: 0.5;
+  opacity: 0.3;
 }
 
-/* Gallery nav */
+/* Gallery Navigation */
 .arc-gallery-btn {
   position: absolute;
   top: 50%;
@@ -276,7 +225,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   color: white;
   border: none;
   border-radius: 50%;
@@ -290,7 +239,7 @@
 }
 
 .arc-gallery-btn:hover {
-  background: rgba(0,0,0,0.7);
+  background: rgba(0, 0, 0, 0.7);
 }
 
 .arc-gallery-btn--prev { left: 0.5rem; }
@@ -315,7 +264,7 @@
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
-  background: rgba(255,255,255,0.5);
+  background: rgba(255, 255, 255, 0.5);
   border: none;
   padding: 0;
   cursor: pointer;
@@ -323,7 +272,7 @@
 }
 
 .arc-gallery-dot:hover {
-  background: rgba(255,255,255,0.75);
+  background: rgba(255, 255, 255, 0.75);
 }
 
 .arc-gallery-dot--active {
@@ -332,7 +281,7 @@
 }
 
 .arc-gallery-more {
-  color: rgba(255,255,255,0.75);
+  color: rgba(255, 255, 255, 0.75);
   font-size: 0.75rem;
   margin-left: 0.25rem;
 }
@@ -342,13 +291,15 @@
   top: 0.5rem;
   right: 0.5rem;
   padding: 0.25rem 0.5rem;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   color: white;
   font-size: 0.75rem;
   border-radius: 9999px;
 }
 
-/* Badge */
+/**
+ * Condition Badge
+ */
 .arc-badge {
   position: absolute;
   top: 0.5rem;
@@ -358,27 +309,27 @@
   font-size: 0.75rem;
   font-weight: 700;
   color: white;
+  text-transform: uppercase;
 }
 
-.arc-badge--new { background: var(--arc-success); }
-.arc-badge--used { background: var(--arc-warning); }
-
-/* Card body */
+/**
+ * Card Body
+ */
 .arc-card-body {
-  padding: 1rem;
+  padding: var(--arc-card-padding);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .arc-card-title {
-  font-size: 1.125rem;
-  font-weight: 700;
   margin: 0 0 0.125rem 0;
   line-height: 1.3;
 }
 
 .arc-card-model {
-  font-size: 0.875rem;
-  color: var(--arc-gray-500);
   margin: 0 0 0.75rem 0;
+  font-size: 0.875rem;
 }
 
 .arc-card-price-row {
@@ -389,24 +340,22 @@
 }
 
 .arc-card-price {
-  font-size: 1.25rem;
   font-weight: 700;
-  color: var(--arc-primary);
 }
 
 .arc-card-stock {
   padding: 0.25rem 0.5rem;
-  background: var(--arc-gray-100);
-  color: var(--arc-gray-600);
   font-size: 0.75rem;
   font-weight: 500;
-  border-radius: 0.25rem;
+  border-radius: var(--arc-border-radius);
 }
 
-/* Card details */
+/**
+ * Card Details
+ */
 .arc-card-details {
-  border-top: 1px solid var(--arc-gray-100);
   padding-top: 0.75rem;
+  margin-top: auto;
 }
 
 .arc-card-detail {
@@ -414,7 +363,6 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.875rem;
-  color: var(--arc-gray-600);
   margin-bottom: 0.375rem;
 }
 
@@ -425,7 +373,6 @@
 .arc-card-detail svg {
   width: 0.875rem;
   height: 0.875rem;
-  color: var(--arc-gray-400);
   flex-shrink: 0;
 }
 
@@ -435,28 +382,26 @@
   white-space: nowrap;
 }
 
-/* Specs */
+/**
+ * Specs Tags
+ */
 .arc-card-specs {
   display: flex;
   flex-wrap: wrap;
   gap: 0.375rem;
   margin-top: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px solid var(--arc-gray-100);
 }
 
 .arc-spec-tag {
   padding: 0.125rem 0.5rem;
   font-size: 0.75rem;
-  border-radius: 0.25rem;
+  border-radius: var(--arc-border-radius);
 }
 
-.arc-spec-tag--color { background: var(--arc-gray-100); color: var(--arc-gray-600); }
-.arc-spec-tag--engine { background: #dbeafe; color: #1d4ed8; }
-.arc-spec-tag--hp { background: #ffedd5; color: #c2410c; }
-.arc-spec-tag--fuel { background: #dcfce7; color: #16a34a; }
-
-/* States */
+/**
+ * State Messages
+ */
 .arc-empty,
 .arc-loading,
 .arc-error {
@@ -468,37 +413,47 @@
 .arc-loading svg {
   width: 4rem;
   height: 4rem;
-  color: var(--arc-gray-300);
   margin: 0 auto 1rem;
+  opacity: 0.3;
 }
 
 .arc-empty-title,
 .arc-error-title {
-  font-size: 1.25rem;
-  font-weight: 600;
   margin: 0 0 0.5rem 0;
 }
-
-.arc-empty-title { color: var(--arc-gray-600); }
-.arc-error-title { color: var(--arc-danger); }
 
 .arc-empty-text,
 .arc-error-text,
 .arc-loading-text {
-  color: var(--arc-gray-400);
   margin: 0;
 }
 
 .arc-spinner {
   width: 3rem;
   height: 3rem;
-  border: 3px solid var(--arc-gray-200);
-  border-top-color: var(--arc-primary);
+  border: 3px solid currentColor;
+  border-top-color: transparent;
   border-radius: 50%;
   animation: arc-spin 1s linear infinite;
   margin: 0 auto 1rem;
+  opacity: 0.3;
 }
 
 @keyframes arc-spin {
   to { transform: rotate(360deg); }
 }
+
+/**
+ * Utility Classes
+ * Add these to your theme for color coordination:
+ *
+ * .arc-stat-badge--new { background: your-success-color; }
+ * .arc-stat-badge--used { background: your-warning-color; }
+ * .arc-stat-badge--photos { background: your-info-color; }
+ * .arc-badge--new { background: your-success-color; }
+ * .arc-badge--used { background: your-warning-color; }
+ * .arc-spec-tag--color { background: your-neutral-color; }
+ * .arc-spec-tag--engine { background: your-info-color; }
+ * .arc-spec-tag--hp { background: your-warning-color; }
+ * .arc-spec-tag--fuel { background: your-success-color; }
+ */
