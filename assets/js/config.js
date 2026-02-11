@@ -52,6 +52,7 @@ ARC.state = {
   categories: [],
   locations: [],
   years: [],
+  counts: { condition: {}, make: {}, category: {}, location: {}, year: {} },
   isLoading: true,
   error: null
 };

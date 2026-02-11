@@ -146,6 +146,24 @@ ARC.filters = {
       new: inventory.filter(function(i) { return i.condition === 'New'; }).length,
       used: inventory.filter(function(i) { return i.condition === 'Used'; }).length
     };
+  },
+
+  /**
+   * Get counts per value for each filter dimension (based on full inventory)
+   */
+  getCounts: function(inventory) {
+    var counts = { condition: {}, make: {}, category: {}, location: {}, year: {} };
+    inventory.forEach(function(item) {
+      if (item.condition) counts.condition[item.condition] = (counts.condition[item.condition] || 0) + 1;
+      if (item.make) {
+        var mk = item.make.toUpperCase();
+        counts.make[mk] = (counts.make[mk] || 0) + 1;
+      }
+      if (item.type) counts.category[item.type] = (counts.category[item.type] || 0) + 1;
+      if (item.branch) counts.location[item.branch] = (counts.location[item.branch] || 0) + 1;
+      if (item.year) counts.year[item.year] = (counts.year[item.year] || 0) + 1;
+    });
+    return counts;
   }
 
 };

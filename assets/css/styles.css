@@ -1,21 +1,19 @@
 /**
- * ARC Inventory - Minimal Structural Styles
+ * ARC Inventory - Structural Styles
  *
- * Provides only essential layout and functional styles.
+ * Provides layout and functional styles.
  * Inherits colors, typography, and spacing from WordPress theme.
  *
  * Override these CSS custom properties in your theme for customization.
  */
 
 :root {
-  /* Structural spacing - adjust to match your theme */
   --arc-container-padding: 1rem;
   --arc-grid-gap: 1.25rem;
   --arc-card-padding: 1rem;
-
-  /* Functional elements */
   --arc-gallery-height: 200px;
-  --arc-border-radius: 4px; /* Matches your site's 4px radius */
+  --arc-border-radius: 4px;
+  --arc-sidebar-width: 240px;
 }
 
 /**
@@ -28,7 +26,6 @@
   box-sizing: border-box;
 }
 
-/* Explicit box-sizing for form elements */
 .arc-inventory input,
 .arc-inventory select,
 .arc-inventory button {
@@ -36,79 +33,130 @@
 }
 
 /**
- * Header & Controls
+ * Sidebar + Content Layout
  */
-.arc-header {
-  padding: var(--arc-container-padding);
-  margin-bottom: var(--arc-container-padding);
-}
-
-.arc-header-inner {
+.arc-layout {
+  display: flex;
+  gap: 2rem;
   max-width: 1400px;
   margin: 0 auto;
+  padding: 0 var(--arc-container-padding);
 }
 
-.arc-header-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.arc-title {
-  margin: 0;
-}
-
-.arc-subtitle {
-  margin: 0.25rem 0 0 0;
+@media (max-width: 767px) {
+  .arc-layout {
+    flex-direction: column;
+    gap: 1rem;
+  }
 }
 
 /**
- * Stats
+ * Sidebar
  */
-.arc-stats {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+.arc-sidebar {
+  width: var(--arc-sidebar-width);
+  flex-shrink: 0;
 }
 
-.arc-stat-badge {
-  padding: 0.375rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-  font-weight: 600;
+@media (max-width: 767px) {
+  .arc-sidebar {
+    width: 100%;
+  }
 }
 
-/**
- * Filters
- */
-.arc-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  align-items: flex-end;
+.arc-sidebar-search {
+  margin-bottom: 1.25rem;
 }
 
-.arc-filter-group {
-  min-width: 140px;
-}
-
-.arc-filter-group--search {
-  flex: 1;
-  min-width: 200px;
-}
-
-.arc-filter-label {
+.arc-sidebar-clear {
   display: block;
-  font-size: 0.75rem;
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 1rem;
+  font-size: 0.8125rem;
   font-weight: 500;
+  text-align: center;
+  background: none;
+  border: 1px solid #d1d5db;
+  border-radius: var(--arc-border-radius);
+  cursor: pointer;
+  color: #6b7280;
+}
+
+/**
+ * Filter Sections
+ */
+.arc-filter-section {
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.25rem;
   margin-bottom: 0.25rem;
 }
 
-.arc-filter-input,
-.arc-filter-select {
+.arc-filter-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0.625rem 0;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  text-align: left;
+}
+
+.arc-filter-heading svg {
+  width: 1rem;
+  height: 1rem;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+.arc-filter-section--open .arc-filter-heading svg {
+  transform: rotate(180deg);
+}
+
+.arc-filter-list {
+  display: none;
+  padding-bottom: 0.5rem;
+}
+
+.arc-filter-section--open .arc-filter-list {
+  display: block;
+}
+
+/**
+ * Filter Options (radio buttons)
+ */
+.arc-filter-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.arc-filter-option input[type="radio"] {
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.arc-filter-option-label {
+  flex: 1;
+}
+
+.arc-filter-option-count {
+  color: #9ca3af;
+  font-size: 0.8125rem;
+}
+
+/**
+ * Search Input
+ */
+.arc-filter-input {
   box-sizing: border-box;
   width: 100%;
   padding: 0.5rem 0.75rem;
@@ -121,22 +169,10 @@
   height: 2.5rem;
 }
 
-.arc-filter-input:focus,
-.arc-filter-select:focus {
+.arc-filter-input:focus {
   outline: none;
   border-color: #6b7280;
   box-shadow: 0 0 0 1px #6b7280;
-}
-
-.arc-filter-select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-  background-position: right 0.625rem center;
-  background-repeat: no-repeat;
-  background-size: 1.25rem 1.25rem;
-  padding-right: 2.25rem;
 }
 
 .arc-search-wrapper {
@@ -157,58 +193,36 @@
   padding-left: 2.25rem;
 }
 
-.arc-filter-group--year {
-  min-width: 200px;
-}
-
-.arc-year-range {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-}
-
-.arc-year-range .arc-filter-select {
+/**
+ * Main Content Area
+ */
+.arc-main {
   flex: 1;
   min-width: 0;
 }
 
-.arc-year-separator {
-  font-size: 0.8125rem;
-  color: #6b7280;
-  flex-shrink: 0;
-}
-
-.arc-filter-group--clear {
+/**
+ * Toolbar
+ */
+.arc-toolbar {
   display: flex;
-  align-items: flex-end;
-}
-
-.arc-btn-clear {
-  display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
-  background: transparent;
-  border: none;
-  border-radius: var(--arc-border-radius);
-  cursor: pointer;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
 }
 
-.arc-btn-clear svg {
-  width: 1rem;
-  height: 1rem;
+.arc-toolbar-count {
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
 }
 
 /**
  * Content Grid
  */
-.arc-content {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 var(--arc-container-padding);
-}
-
 .arc-grid {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
@@ -231,6 +245,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  box-shadow: none;
 }
 
 /**
@@ -382,31 +397,10 @@
   font-size: 0.875rem;
 }
 
-.arc-card-price-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.75rem;
-}
-
-.arc-card-price {
-  font-weight: 700;
-}
-
-.arc-card-stock {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  border-radius: var(--arc-border-radius);
-}
-
 .arc-card-title-link {
   text-decoration: none;
   color: inherit;
-}
-
-.arc-card-title-link:hover .arc-card-title {
-  text-decoration: underline;
+  cursor: pointer;
 }
 
 .arc-btn-details {
@@ -422,44 +416,39 @@
   color: #374151;
   background: #fff;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
-}
-
-.arc-btn-details:hover {
-  background: #f3f4f6;
-  border-color: #9ca3af;
 }
 
 /**
- * Card Details
+ * Card Details Table
  */
 .arc-card-details {
-  padding-top: 0.75rem;
   margin-top: auto;
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.arc-card-detail {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-  margin-bottom: 0.375rem;
+.arc-card-details th,
+.arc-card-details td {
+  padding: 0.375rem 0;
+  font-size: 0.8125rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
 }
 
-.arc-card-detail:last-child {
-  margin-bottom: 0;
+.arc-card-details tr:last-child th,
+.arc-card-details tr:last-child td {
+  border-bottom: none;
 }
 
-.arc-card-detail svg {
-  width: 0.875rem;
-  height: 0.875rem;
-  flex-shrink: 0;
+.arc-card-details th {
+  font-weight: 600;
+  color: #6b7280;
+  width: 40%;
+  padding-right: 0.5rem;
 }
 
-.arc-card-detail span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.arc-card-details td {
+  color: #1f2937;
 }
 
 /**
@@ -641,18 +630,3 @@
 .arc-detail-specs td {
   color: #1f2937;
 }
-
-/**
- * Utility Classes
- * Add these to your theme for color coordination:
- *
- * .arc-stat-badge--new { background: your-success-color; }
- * .arc-stat-badge--used { background: your-warning-color; }
- * .arc-stat-badge--photos { background: your-info-color; }
- * .arc-badge--new { background: your-success-color; }
- * .arc-badge--used { background: your-warning-color; }
- * .arc-spec-tag--color { background: your-neutral-color; }
- * .arc-spec-tag--engine { background: your-info-color; }
- * .arc-spec-tag--hp { background: your-warning-color; }
- * .arc-spec-tag--fuel { background: your-success-color; }
- */
