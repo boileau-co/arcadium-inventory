@@ -132,11 +132,17 @@ class ARC_Inventory_API {
                 'images' => array()
             );
 
-            // Parse images from url field (appears to be a single URL)
+            // Parse images from url field (pipe-delimited URLs)
             if (!empty($item->url)) {
-                $url = (string) $item->url;
-                if (!empty($url)) {
-                    $inventory_item['images'][] = $url;
+                $url_string = (string) $item->url;
+                if (!empty($url_string)) {
+                    $urls = explode('|', $url_string);
+                    foreach ($urls as $url) {
+                        $url = trim($url);
+                        if (!empty($url)) {
+                            $inventory_item['images'][] = $url;
+                        }
+                    }
                 }
             }
 
