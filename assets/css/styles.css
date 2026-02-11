@@ -387,7 +387,7 @@
   flex-direction: column;
 }
 
-.arc-card-title {
+.arc-inventory h3.arc-card-title {
   margin: 0 0 0.125rem 0;
   font-size: 1.125rem;
   line-height: 1.3;
