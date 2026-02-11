@@ -3,7 +3,7 @@
  * Plugin Name: Arcadium Inventory by Boileau & Co.
  * Plugin URI: https://github.com/boileau-co/arcadium-inventory
  * Description: A modular JavaScript application for displaying vehicle inventory with XML feed integration and advanced filtering.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Boileau & Co.
  * Author URI: https://boileauandco.com
  * Text Domain: arcadium-inventory
@@ -24,10 +24,21 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('ARC_INVENTORY_VERSION', '1.0.0');
+define('ARC_INVENTORY_VERSION', '1.1.0');
 define('ARC_INVENTORY_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('ARC_INVENTORY_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('ARC_INVENTORY_PLUGIN_FILE', __FILE__);
+
+// GitHub update checker
+require_once ARC_INVENTORY_PLUGIN_DIR . 'plugin-update-checker/plugin-update-checker.php';
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+
+$arc_update_checker = PucFactory::buildUpdateChecker(
+    'https://github.com/boileau-co/arcadium-inventory/',
+    __FILE__,
+    'arcadium-inventory'
+);
+$arc_update_checker->setBranch('master');
 
 // Require the main classes
 require_once ARC_INVENTORY_PLUGIN_DIR . 'includes/class-arc-admin.php';
