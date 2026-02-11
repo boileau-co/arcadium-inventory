@@ -46,6 +46,20 @@
         .test-info ul {
             margin-bottom: 0;
         }
+
+        /* Theme colors for testing */
+        .arc-stat-badge--new { background: #22c55e; color: white; }
+        .arc-stat-badge--used { background: #f59e0b; color: white; }
+        .arc-badge--new { background: #22c55e; }
+        .arc-badge--used { background: #f59e0b; }
+        .arc-card { background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .arc-card-price { color: #ea580c; }
+        .arc-card-stock { background: #f3f4f6; }
+        .arc-spec-tag--color { background: #e5e7eb; }
+        .arc-spec-tag--fuel { background: #dcfce7; color: #166534; }
+        .arc-spec-tag--type { background: #dbeafe; color: #1e40af; }
+        .arc-gallery-placeholder { background: #e5e7eb; color: #9ca3af; }
+        .arc-detail-price { color: #ea580c; }
     </style>
 </head>
 <body>
@@ -65,7 +79,7 @@
         </div>
 
         <!-- This is where the inventory will be rendered -->
-        <div id="arc-inventory"></div>
+        <div id="arc-inventory" class="arc-inventory"></div>
     </div>
 
     <!--

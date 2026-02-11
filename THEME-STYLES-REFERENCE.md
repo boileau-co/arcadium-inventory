@@ -1,160 +1,178 @@
 # Theme Styling Reference
 
-Add these styles to your WordPress theme's CSS to make the inventory match your site's design.
+Add these styles to your WordPress theme's SCSS to make the inventory match your site's design.
 
 Based on WMI Trucks site colors and styling.
 
-## Add to Your Theme's CSS
+## Add to Your Theme's SCSS
 
-```css
+```scss
 /**
  * Arcadium Inventory - WMI Theme Customization
  */
 
-/* Cards */
+// Color Variables
+$color-dark: #272623;
+$color-orange: #FF7144;
+$color-red-orange: #E9453A;
+$color-yellow: #F6AE30;
+$color-light-gray: #E6E6E6;
+$color-cyan-gray: #abb8c3;
+$color-green: #10b981;
+$color-text-muted: #666;
+$color-text-light: #999;
+
+// Cards
 .arc-card {
   background: #fff;
-  border: 1px solid #E6E6E6;
+  border: 1px solid $color-light-gray;
+
+  &:hover {
+    box-shadow: 6px 6px 9px rgba(0, 0, 0, 0.2);
+  }
 }
 
-.arc-card:hover {
-  box-shadow: 6px 6px 9px rgba(0,0,0,0.2);
+// Condition Badges (on photos)
+.arc-badge {
+  &--new {
+    background: $color-green;
+  }
+
+  &--used {
+    background: $color-yellow;
+  }
 }
 
-/* Condition Badges (on photos) */
-.arc-badge--new {
-  background: #10b981; /* or your preferred "new" color */
+// Stats Badges (header)
+.arc-stat-badge {
+  &--new {
+    background: #d1fae5;
+    color: #047857;
+  }
+
+  &--used {
+    background: #fff3cd;
+    color: #b45309;
+  }
+
+  &--photos {
+    background: #dbeafe;
+    color: #1d4ed8;
+  }
 }
 
-.arc-badge--used {
-  background: #F6AE30; /* yellow-orange from your site */
-}
-
-/* Stats Badges (header) */
-.arc-stat-badge--new {
-  background: #d1fae5;
-  color: #047857;
-}
-
-.arc-stat-badge--used {
-  background: #fff3cd;
-  color: #b45309;
-}
-
-.arc-stat-badge--photos {
-  background: #dbeafe;
-  color: #1d4ed8;
-}
-
-/* Price */
+// Price
 .arc-card-price {
-  color: #FF7144; /* Your primary orange accent */
+  color: $color-orange;
   font-size: 1.25rem;
 }
 
-/* Stock Number Badge */
+// Stock Number Badge
 .arc-card-stock {
-  background: #E6E6E6;
-  color: #272623;
+  background: $color-light-gray;
+  color: $color-dark;
 }
 
-/* Spec Tags */
-.arc-spec-tag--color {
-  background: #E6E6E6;
-  color: #272623;
+// Spec Tags
+.arc-spec-tag {
+  &--color {
+    background: $color-light-gray;
+    color: $color-dark;
+  }
+
+  &--engine {
+    background: $color-cyan-gray;
+    color: $color-dark;
+  }
+
+  &--hp {
+    background: $color-yellow;
+    color: $color-dark;
+  }
+
+  &--fuel {
+    background: $color-green;
+    color: white;
+  }
 }
 
-.arc-spec-tag--engine {
-  background: #abb8c3;
-  color: #272623;
-}
-
-.arc-spec-tag--hp {
-  background: #F6AE30;
-  color: #272623;
-}
-
-.arc-spec-tag--fuel {
-  background: #10b981;
-  color: white;
-}
-
-/* Form Inputs */
+// Form Inputs
 .arc-filter-input,
 .arc-filter-select {
   background: #fff;
-  border: 1px solid #E6E6E6;
-  color: #272623;
+  border: 1px solid $color-light-gray;
+  color: $color-dark;
+
+  &:focus {
+    outline: none;
+    border-color: $color-orange;
+    box-shadow: 0 0 0 2px rgba(255, 113, 68, 0.1);
+  }
 }
 
-.arc-filter-input:focus,
-.arc-filter-select:focus {
-  outline: none;
-  border-color: #FF7144;
-  box-shadow: 0 0 0 2px rgba(255, 113, 68, 0.1);
-}
-
-/* Clear Filters Button */
+// Clear Filters Button
 .arc-btn-clear {
-  color: #272623;
+  color: $color-dark;
+
+  &:hover {
+    background: $color-light-gray;
+  }
 }
 
-.arc-btn-clear:hover {
-  background: #E6E6E6;
-}
-
-/* Filter Labels */
+// Filter Labels
 .arc-filter-label {
-  color: #666;
+  color: $color-text-muted;
 }
 
-/* Gallery Placeholder (no image) */
+// Gallery Placeholder (no image)
 .arc-gallery-placeholder {
-  background: #E6E6E6;
-  color: #999;
+  background: $color-light-gray;
+  color: $color-text-light;
 }
 
-/* Card Details Text */
+// Card Details Text
 .arc-card-model,
 .arc-card-detail {
-  color: #666;
+  color: $color-text-muted;
 }
 
-/* Empty/Error States */
+// Empty/Error States
 .arc-empty-title {
-  color: #272623;
+  color: $color-dark;
 }
 
 .arc-error-title {
-  color: #E9453A; /* Your red-orange accent */
+  color: $color-red-orange;
 }
 
 .arc-empty-text,
 .arc-error-text,
 .arc-loading-text {
-  color: #999;
+  color: $color-text-light;
 }
 
-/* Optional: Adjust spacing to match your site */
+// Optional: Adjust spacing to match your site
 :root {
   --arc-container-padding: 1.5rem;
   --arc-grid-gap: 2rem;
   --arc-card-padding: 1.25rem;
 }
 
-/* Optional: Dark background variant (if placing on dark section) */
-.dark-section .arc-inventory {
-  color: #fff;
-}
+// Optional: Dark background variant (if placing on dark section)
+.dark-section {
+  .arc-inventory {
+    color: #fff;
+  }
 
-.dark-section .arc-card {
-  background: #1a1a1a;
-  border-color: #333;
-}
+  .arc-card {
+    background: #1a1a1a;
+    border-color: #333;
+  }
 
-.dark-section .arc-card-detail,
-.dark-section .arc-card-model {
-  color: #ccc;
+  .arc-card-detail,
+  .arc-card-model {
+    color: #ccc;
+  }
 }
 ```
 
@@ -162,13 +180,13 @@ Based on WMI Trucks site colors and styling.
 
 You can also use CSS custom properties for quick adjustments:
 
-```css
+```scss
 .arc-inventory {
   --arc-container-padding: 2rem;
   --arc-grid-gap: 1.5rem;
   --arc-card-padding: 1.5rem;
   --arc-gallery-height: 250px;
-  --arc-border-radius: 4px; /* Already matches your site */
+  --arc-border-radius: 4px; // Already matches your site
 }
 ```
 

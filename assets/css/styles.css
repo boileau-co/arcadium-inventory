@@ -113,7 +113,30 @@
   width: 100%;
   padding: 0.5rem 0.75rem;
   font-size: 0.875rem;
+  border: 1px solid #d1d5db;
   border-radius: var(--arc-border-radius);
+  background-color: #fff;
+  color: #1f2937;
+  line-height: 1.5;
+  height: 2.5rem;
+}
+
+.arc-filter-input:focus,
+.arc-filter-select:focus {
+  outline: none;
+  border-color: #6b7280;
+  box-shadow: 0 0 0 1px #6b7280;
+}
+
+.arc-filter-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.625rem center;
+  background-repeat: no-repeat;
+  background-size: 1.25rem 1.25rem;
+  padding-right: 2.25rem;
 }
 
 .arc-search-wrapper {
@@ -132,6 +155,32 @@
 
 .arc-search-wrapper .arc-filter-input {
   padding-left: 2.25rem;
+}
+
+.arc-filter-group--year {
+  min-width: 200px;
+}
+
+.arc-year-range {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.arc-year-range .arc-filter-select {
+  flex: 1;
+  min-width: 0;
+}
+
+.arc-year-separator {
+  font-size: 0.8125rem;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.arc-filter-group--clear {
+  display: flex;
+  align-items: flex-end;
 }
 
 .arc-btn-clear {
@@ -355,6 +404,36 @@
   border-radius: var(--arc-border-radius);
 }
 
+.arc-card-title-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.arc-card-title-link:hover .arc-card-title {
+  text-decoration: underline;
+}
+
+.arc-btn-details {
+  display: block;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid #d1d5db;
+  border-radius: var(--arc-border-radius);
+  color: #374151;
+  background: #fff;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.arc-btn-details:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
 /**
  * Card Details
  */
@@ -446,6 +525,125 @@
 
 @keyframes arc-spin {
   to { transform: rotate(360deg); }
+}
+
+/**
+ * Detail Page
+ */
+.arc-detail {
+  padding: var(--arc-container-padding);
+}
+
+.arc-detail-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.arc-detail-back {
+  margin-bottom: 1.5rem;
+}
+
+.arc-btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+.arc-btn-back:hover {
+  text-decoration: underline;
+}
+
+.arc-btn-back svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.arc-detail-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .arc-detail-layout {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.arc-detail-gallery .arc-gallery {
+  height: 300px;
+  border-radius: var(--arc-border-radius);
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .arc-detail-gallery .arc-gallery {
+    height: 400px;
+  }
+}
+
+.arc-detail-title {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.75rem;
+  line-height: 1.2;
+}
+
+.arc-detail-model {
+  margin: 0 0 1rem 0;
+  font-size: 1.125rem;
+  color: #6b7280;
+}
+
+.arc-detail-price-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.arc-detail-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.arc-detail-stock {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: var(--arc-border-radius);
+  background: #f3f4f6;
+}
+
+.arc-detail-specs {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.arc-detail-specs th,
+.arc-detail-specs td {
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  font-size: 0.875rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.arc-detail-specs th {
+  font-weight: 600;
+  width: 40%;
+  color: #6b7280;
+}
+
+.arc-detail-specs td {
+  color: #1f2937;
 }
 
 /**

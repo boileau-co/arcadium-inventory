@@ -29,6 +29,15 @@ ARC.formatters = {
   },
   
   /**
+   * Format GVWR for display
+   */
+  gvwr: function(value) {
+    var num = parseInt(value);
+    if (isNaN(num) || num <= 0) return null;
+    return num.toLocaleString() + ' lbs';
+  },
+
+  /**
    * Escape HTML to prevent XSS
    */
   escapeHtml: function(text) {
