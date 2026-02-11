@@ -104,30 +104,39 @@ class ARC_Inventory_API {
 
         $inventory = array();
 
-        // Parse each item (adjust based on your actual XML structure)
-        foreach ($xml->item as $item) {
+        // Parse each listing (actual XML uses <Listing> elements with x-prefixed fields)
+        foreach ($xml->Listing as $item) {
             $inventory_item = array(
-                'stockNo' => (string) $item->stockNo,
-                'branch' => (string) $item->branch,
-                'year' => (string) $item->year,
-                'make' => (string) $item->make,
-                'model' => (string) $item->model,
-                'condition' => (string) $item->condition,
-                'odometer' => (string) $item->odometer,
-                'ourPrice' => (string) $item->ourPrice,
-                'category' => (string) $item->category,
-                'type' => (string) $item->type,
-                'color' => (string) $item->color,
-                'engineMfr' => (string) $item->engineMfr,
-                'horsepower' => (string) $item->horsepower,
-                'fuelType' => (string) $item->fuelType,
+                'stockNo' => (string) $item->StockNo,
+                'branch' => (string) $item->xBranch,
+                'year' => (string) $item->xYear,
+                'make' => (string) $item->xMake,
+                'model' => (string) $item->xModel,
+                'vin' => (string) $item->VIN,
+                'series' => (string) $item->xSeries,
+                'condition' => (string) $item->xCondition,
+                'odometer' => (string) $item->xOdometer,
+                'gvwr' => (string) $item->xGVWR,
+                'bodyStyle' => (string) $item->xBodyStyle,
+                'ourPrice' => (string) $item->xOurPrice,
+                'retailPrice' => (string) $item->xRetailPrice,
+                'category' => (string) $item->categorie,
+                'type' => (string) $item->xType,
+                'status' => (string) $item->xStatus,
+                'color' => (string) $item->xColorExterior,
+                'engineMfr' => (string) $item->xEngineManufacturer,
+                'horsepower' => (string) $item->xHorsepower,
+                'fuelType' => (string) $item->xFuelType,
+                'wheelbase' => (string) $item->xWheelBase,
+                'suspension' => (string) $item->xSuspension,
                 'images' => array()
             );
 
-            // Parse images
-            if (isset($item->images) && isset($item->images->image)) {
-                foreach ($item->images->image as $image) {
-                    $inventory_item['images'][] = (string) $image;
+            // Parse images from url field (appears to be a single URL)
+            if (!empty($item->url)) {
+                $url = (string) $item->url;
+                if (!empty($url)) {
+                    $inventory_item['images'][] = $url;
                 }
             }
 

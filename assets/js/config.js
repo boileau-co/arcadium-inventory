@@ -26,7 +26,11 @@ ARC.config = {
   defaultFilters: {
     search: '',
     condition: 'all',
-    make: 'all'
+    make: 'all',
+    category: 'all',
+    location: 'all',
+    yearMin: 'all',
+    yearMax: 'all'
   }
 };
 
@@ -45,6 +49,9 @@ ARC.state = {
   imageIndices: {},
   stats: { total: 0, new: 0, used: 0 },
   makes: [],
+  categories: [],
+  locations: [],
+  years: [],
   isLoading: true,
   error: null
 };
