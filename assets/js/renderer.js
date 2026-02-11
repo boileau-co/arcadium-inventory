@@ -1,11 +1,11 @@
 /**
  * ARC Inventory - Renderer
- * 
+ *
  * HTML rendering functions for all components.
  */
 
 ARC.renderer = {
-  
+
   /**
    * Render the entire app
    */
@@ -48,35 +48,23 @@ ARC.renderer = {
 
     ARC.renderer.bindEvents();
   },
-  
+
   /**
    * Render a single filter section for the sidebar
    */
-  filterSection: function(title, filterKey, values, currentValue, counts) {
+  filterSection: function(title, filterKey, values, selectedArray, counts) {
     var esc = ARC.formatters.escapeHtml;
-    var isOpen = currentValue !== 'all';
+    var isOpen = selectedArray.length > 0;
 
-    var items = '<label class="arc-filter-option">' +
-      '<input type="radio" name="' + filterKey + '" value="all" data-filter="' + filterKey + '"' + (currentValue === 'all' ? ' checked' : '') + '>' +
-      '<span class="arc-filter-option-label">All</span>' +
-    '</label>';
-
+    var items = '';
     values.forEach(function(val) {
       var count = counts[val] || 0;
-      var checked = '';
-      if (filterKey === 'condition' || filterKey === 'location') {
-        checked = currentValue === val ? ' checked' : '';
-      } else if (filterKey === 'make') {
-        checked = currentValue.toUpperCase() === val.toUpperCase() ? ' checked' : '';
-      } else if (filterKey === 'category') {
-        checked = currentValue.toUpperCase() === val.toUpperCase() ? ' checked' : '';
-      } else if (filterKey === 'year') {
-        checked = currentValue === String(val) ? ' checked' : '';
-      }
+      var valStr = String(val);
+      var checked = selectedArray.indexOf(valStr) !== -1 ? ' checked' : '';
 
       items += '<label class="arc-filter-option">' +
-        '<input type="radio" name="' + filterKey + '" value="' + esc(String(val)) + '" data-filter="' + filterKey + '"' + checked + '>' +
-        '<span class="arc-filter-option-label">' + esc(String(val)) + '</span>' +
+        '<input type="checkbox" data-filter="' + filterKey + '" value="' + esc(valStr) + '"' + checked + '>' +
+        '<span class="arc-filter-option-label">' + esc(valStr) + '</span>' +
         '<span class="arc-filter-option-count">(' + count + ')</span>' +
       '</label>';
     });
@@ -100,14 +88,7 @@ ARC.renderer = {
     var esc = ARC.formatters.escapeHtml;
     var hasActiveFilters = ARC.filters.isActive(filters);
 
-    // Year: present as individual radio buttons (descending order)
     var yearsDesc = state.years.slice().reverse();
-
-    // Determine the single selected year (if yearMin === yearMax and not 'all')
-    var selectedYear = 'all';
-    if (filters.yearMin !== 'all' && filters.yearMin === filters.yearMax) {
-      selectedYear = filters.yearMin;
-    }
 
     var clearBtn = hasActiveFilters ?
       '<button class="arc-sidebar-clear" data-action="clear-filters">Clear All Filters</button>' : '';
@@ -123,7 +104,7 @@ ARC.renderer = {
       ARC.renderer.filterSection('Make', 'make', state.makes, filters.make, counts.make) +
       ARC.renderer.filterSection('Category', 'category', state.categories, filters.category, counts.category) +
       ARC.renderer.filterSection('Location', 'location', state.locations, filters.location, counts.location) +
-      ARC.renderer.filterSection('Year', 'year', yearsDesc, selectedYear, counts.year) +
+      ARC.renderer.filterSection('Year', 'year', yearsDesc, filters.year, counts.year) +
       clearBtn +
     '</aside>';
   },
@@ -137,24 +118,24 @@ ARC.renderer = {
       '<span class="arc-toolbar-count">' + state.filteredInventory.length + ' Matches</span>' +
     '</div>';
   },
-  
+
   /**
    * Render inventory grid
    */
   grid: function() {
     var items = ARC.state.filteredInventory;
-    
+
     if (items.length === 0) {
       return ARC.renderer.empty();
     }
-    
+
     var cards = items.map(function(item) {
       return ARC.renderer.card(item);
     }).join('');
-    
+
     return '<div class="arc-grid">' + cards + '</div>';
   },
-  
+
   /**
    * Render single card
    */
@@ -200,7 +181,7 @@ ARC.renderer = {
       '</div>' +
     '</div>';
   },
-  
+
   /**
    * Render specs tags
    */
@@ -224,7 +205,7 @@ ARC.renderer = {
     var base = window.location.pathname;
     return base + '?stock=' + encodeURIComponent(stockNo);
   },
-  
+
   /**
    * Render detail view for a single item
    */
@@ -298,7 +279,7 @@ ARC.renderer = {
       '<p class="arc-empty-text">Try adjusting your search or filters</p>' +
     '</div>';
   },
-  
+
   /**
    * Render loading state
    */
@@ -309,7 +290,7 @@ ARC.renderer = {
       '<p class="arc-loading-text">Loading inventory...</p>' +
     '</div>';
   },
-  
+
   /**
    * Render error state
    */
@@ -320,7 +301,7 @@ ARC.renderer = {
       '<p class="arc-error-text">' + ARC.formatters.escapeHtml(message) + '</p>' +
     '</div>';
   },
-  
+
   /**
    * Bind event listeners
    */
@@ -338,7 +319,7 @@ ARC.renderer = {
     container.addEventListener('input', ARC.renderer.handleInput);
     container.addEventListener('change', ARC.renderer.handleChange);
   },
-  
+
   /**
    * Handle click events
    */
@@ -381,21 +362,21 @@ ARC.renderer = {
         break;
     }
   },
-  
+
   /**
    * Handle input events (search)
    */
   handleInput: function(e) {
     var target = e.target;
     if (!target.dataset.filter) return;
-    
+
     if (target.dataset.filter === 'search') {
       ARC.app.setFilter('search', target.value);
     }
   },
-  
+
   /**
-   * Handle change events (dropdowns and radio buttons)
+   * Handle change events (checkboxes)
    */
   handleChange: function(e) {
     var target = e.target;
@@ -404,16 +385,21 @@ ARC.renderer = {
     var filterKey = target.dataset.filter;
     var value = target.value;
 
-    // Year radio sets both yearMin and yearMax
-    if (filterKey === 'year') {
-      ARC.state.filters.yearMin = value;
-      ARC.state.filters.yearMax = value;
-      ARC.state.filteredInventory = ARC.filters.apply(ARC.state.inventory, ARC.state.filters);
-      ARC.renderer.render();
-      return;
+    // Skip search - handled by handleInput
+    if (filterKey === 'search') return;
+
+    // Toggle value in the filter array
+    var arr = ARC.state.filters[filterKey];
+    var idx = arr.indexOf(value);
+    if (target.checked && idx === -1) {
+      arr.push(value);
+    } else if (!target.checked && idx !== -1) {
+      arr.splice(idx, 1);
     }
 
-    ARC.app.setFilter(filterKey, value);
+    ARC.state.filteredInventory = ARC.filters.apply(ARC.state.inventory, ARC.state.filters);
+    ARC.app.syncUrl();
+    ARC.renderer.render();
   }
-  
+
 };
