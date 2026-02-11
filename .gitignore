@@ -46,6 +46,9 @@ composer.lock
 # Logs
 *.log
 
+# Test/dev data
+assets/data/
+
 # Temporary files
 *.tmp
 *.temp

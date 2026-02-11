@@ -139,7 +139,7 @@
   cursor: pointer;
 }
 
-.arc-filter-option input[type="radio"] {
+.arc-filter-option input[type="checkbox"] {
   margin: 0;
   flex-shrink: 0;
 }
@@ -389,6 +389,7 @@
 
 .arc-card-title {
   margin: 0 0 0.125rem 0;
+  font-size: 1.125rem;
   line-height: 1.3;
 }
 

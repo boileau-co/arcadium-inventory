@@ -15,11 +15,16 @@ ARC.app = {
       Object.assign(ARC.config, options);
     }
 
+    // Read filters from URL before loading data
+    ARC.app.readUrlFilters();
+
     // Load data
     ARC.app.loadData();
 
     // Listen for back/forward navigation
     window.addEventListener('popstate', function() {
+      ARC.app.readUrlFilters();
+      ARC.state.filteredInventory = ARC.filters.apply(ARC.state.inventory, ARC.state.filters);
       ARC.renderer.render();
     });
   },
@@ -71,8 +76,11 @@ ARC.app = {
    * Set a filter value and re-render
    */
   setFilter: function(key, value) {
-    ARC.state.filters[key] = value;
+    if (key === 'search') {
+      ARC.state.filters.search = value;
+    }
     ARC.state.filteredInventory = ARC.filters.apply(ARC.state.inventory, ARC.state.filters);
+    ARC.app.syncUrl();
     ARC.renderer.render();
   },
 
@@ -82,6 +90,7 @@ ARC.app = {
   clearFilters: function() {
     ARC.state.filters = ARC.filters.reset();
     ARC.state.filteredInventory = ARC.filters.apply(ARC.state.inventory, ARC.state.filters);
+    ARC.app.syncUrl();
     ARC.renderer.render();
   },
 
@@ -106,9 +115,57 @@ ARC.app = {
    * Navigate back to the listing
    */
   backToListing: function() {
-    var base = window.location.pathname;
-    history.pushState({}, '', base);
+    // Rebuild URL with current filters (no stock param)
+    ARC.app.syncUrl();
     ARC.renderer.render();
+  },
+
+  /**
+   * Read filter state from URL parameters
+   */
+  readUrlFilters: function() {
+    var params = new URLSearchParams(window.location.search);
+    var filters = ARC.filters.reset();
+    var filterKeys = ['condition', 'make', 'category', 'location', 'year'];
+
+    filterKeys.forEach(function(key) {
+      var values = params.getAll(key);
+      if (values.length > 0) {
+        filters[key] = values;
+      }
+    });
+
+    var search = params.get('search');
+    if (search) {
+      filters.search = search;
+    }
+
+    ARC.state.filters = filters;
+  },
+
+  /**
+   * Sync current filter state to URL parameters (replaceState to avoid history spam)
+   */
+  syncUrl: function() {
+    var filters = ARC.state.filters;
+    var params = new URLSearchParams();
+    var filterKeys = ['condition', 'make', 'category', 'location', 'year'];
+
+    if (filters.search) {
+      params.set('search', filters.search);
+    }
+
+    filterKeys.forEach(function(key) {
+      if (filters[key].length > 0) {
+        filters[key].forEach(function(val) {
+          params.append(key, val);
+        });
+      }
+    });
+
+    var queryString = params.toString();
+    var url = window.location.pathname + (queryString ? '?' + queryString : '');
+    history.replaceState({}, '', url);
   }
 
 };

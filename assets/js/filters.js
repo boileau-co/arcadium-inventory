@@ -23,36 +23,39 @@ ARC.filters = {
         if (!matchesSearch) return false;
       }
 
-      // Condition filter
-      if (filters.condition !== 'all' && item.condition !== filters.condition) {
+      // Condition filter (array, empty = all)
+      if (filters.condition.length > 0 && filters.condition.indexOf(item.condition) === -1) {
         return false;
       }
 
-      // Make filter
-      if (filters.make !== 'all' && item.make.toUpperCase() !== filters.make.toUpperCase()) {
-        return false;
+      // Make filter (array, compared uppercase)
+      if (filters.make.length > 0) {
+        var itemMakeUpper = item.make.toUpperCase();
+        var found = false;
+        for (var i = 0; i < filters.make.length; i++) {
+          if (filters.make[i].toUpperCase() === itemMakeUpper) { found = true; break; }
+        }
+        if (!found) return false;
       }
 
-      // Category filter (uses type field)
-      if (filters.category !== 'all' && item.type.toUpperCase() !== filters.category.toUpperCase()) {
-        return false;
+      // Category filter (uses type field, compared uppercase)
+      if (filters.category.length > 0) {
+        var itemTypeUpper = item.type.toUpperCase();
+        var catFound = false;
+        for (var j = 0; j < filters.category.length; j++) {
+          if (filters.category[j].toUpperCase() === itemTypeUpper) { catFound = true; break; }
+        }
+        if (!catFound) return false;
       }
 
       // Location filter (uses branch field)
-      if (filters.location !== 'all' && item.branch !== filters.location) {
+      if (filters.location.length > 0 && filters.location.indexOf(item.branch) === -1) {
         return false;
       }
 
-      // Year range filter
-      if (filters.yearMin !== 'all') {
-        var yearMin = parseInt(filters.yearMin);
-        var itemYear = parseInt(item.year);
-        if (isNaN(itemYear) || itemYear < yearMin) return false;
-      }
-      if (filters.yearMax !== 'all') {
-        var yearMax = parseInt(filters.yearMax);
-        var itemYear2 = parseInt(item.year);
-        if (isNaN(itemYear2) || itemYear2 > yearMax) return false;
+      // Year filter (array of year strings)
+      if (filters.year.length > 0 && filters.year.indexOf(String(item.year)) === -1) {
+        return false;
       }
 
       return true;
@@ -63,15 +66,13 @@ ARC.filters = {
    * Check if any filters are active
    */
   isActive: function(filters) {
-    var defaults = ARC.config.defaultFilters;
     return (
-      filters.search !== defaults.search ||
-      filters.condition !== defaults.condition ||
-      filters.make !== defaults.make ||
-      filters.category !== defaults.category ||
-      filters.location !== defaults.location ||
-      filters.yearMin !== defaults.yearMin ||
-      filters.yearMax !== defaults.yearMax
+      filters.search !== '' ||
+      filters.condition.length > 0 ||
+      filters.make.length > 0 ||
+      filters.category.length > 0 ||
+      filters.location.length > 0 ||
+      filters.year.length > 0
     );
   },
 
@@ -79,7 +80,14 @@ ARC.filters = {
    * Reset filters to defaults
    */
   reset: function() {
-    return Object.assign({}, ARC.config.defaultFilters);
+    return {
+      search: '',
+      condition: [],
+      make: [],
+      category: [],
+      location: [],
+      year: []
+    };
   },
 
   /**
