@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/images/icon-256x256.png" alt="Arcadium Inventory" width="128">
+</p>
+
 # Arcadium Inventory
 
 A WordPress plugin for displaying vehicle inventory with XML feed integration, sidebar filtering, URL deep linking, and automatic updates via GitHub.
