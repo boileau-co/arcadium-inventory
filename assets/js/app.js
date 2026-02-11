@@ -59,6 +59,7 @@ ARC.app = {
     ARC.state.locations = ARC.filters.getUniqueLocations(data);
     ARC.state.years = ARC.filters.getUniqueYears(data);
     ARC.state.stats = ARC.filters.calculateStats(data);
+    ARC.state.counts = ARC.filters.getCounts(data);
     ARC.state.filteredInventory = ARC.filters.apply(data, ARC.state.filters);
     ARC.state.isLoading = false;
     ARC.state.error = null;

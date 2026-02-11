@@ -38,109 +38,103 @@ ARC.renderer = {
     }
 
     container.innerHTML =
-      ARC.renderer.header() +
-      '<div class="arc-content">' +
-        ARC.renderer.grid() +
+      '<div class="arc-layout">' +
+        ARC.renderer.sidebar() +
+        '<div class="arc-main">' +
+          ARC.renderer.toolbar() +
+          ARC.renderer.grid() +
+        '</div>' +
       '</div>';
 
     ARC.renderer.bindEvents();
   },
   
   /**
-   * Render header with filters
+   * Render a single filter section for the sidebar
    */
-  header: function() {
+  filterSection: function(title, filterKey, values, currentValue, counts) {
+    var esc = ARC.formatters.escapeHtml;
+    var isOpen = currentValue !== 'all';
+
+    var items = '<label class="arc-filter-option">' +
+      '<input type="radio" name="' + filterKey + '" value="all" data-filter="' + filterKey + '"' + (currentValue === 'all' ? ' checked' : '') + '>' +
+      '<span class="arc-filter-option-label">All</span>' +
+    '</label>';
+
+    values.forEach(function(val) {
+      var count = counts[val] || 0;
+      var checked = '';
+      if (filterKey === 'condition' || filterKey === 'location') {
+        checked = currentValue === val ? ' checked' : '';
+      } else if (filterKey === 'make') {
+        checked = currentValue.toUpperCase() === val.toUpperCase() ? ' checked' : '';
+      } else if (filterKey === 'category') {
+        checked = currentValue.toUpperCase() === val.toUpperCase() ? ' checked' : '';
+      } else if (filterKey === 'year') {
+        checked = currentValue === String(val) ? ' checked' : '';
+      }
+
+      items += '<label class="arc-filter-option">' +
+        '<input type="radio" name="' + filterKey + '" value="' + esc(String(val)) + '" data-filter="' + filterKey + '"' + checked + '>' +
+        '<span class="arc-filter-option-label">' + esc(String(val)) + '</span>' +
+        '<span class="arc-filter-option-count">(' + count + ')</span>' +
+      '</label>';
+    });
+
+    return '<div class="arc-filter-section' + (isOpen ? ' arc-filter-section--open' : '') + '">' +
+      '<button class="arc-filter-heading" data-action="toggle-section">' +
+        '<span>' + esc(title) + '</span>' +
+        '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>' +
+      '</button>' +
+      '<div class="arc-filter-list">' + items + '</div>' +
+    '</div>';
+  },
+
+  /**
+   * Render sidebar with filters
+   */
+  sidebar: function() {
     var state = ARC.state;
     var filters = state.filters;
-    var hasActiveFilters = ARC.filters.isActive(filters);
+    var counts = state.counts;
     var esc = ARC.formatters.escapeHtml;
+    var hasActiveFilters = ARC.filters.isActive(filters);
 
-    var makesOptions = '<option value="all"' + (filters.make === 'all' ? ' selected' : '') + '>All Makes</option>';
-    state.makes.forEach(function(make) {
-      var selected = filters.make.toUpperCase() === make ? ' selected' : '';
-      makesOptions += '<option value="' + esc(make) + '"' + selected + '>' + esc(make) + '</option>';
-    });
+    // Year: present as individual radio buttons (descending order)
+    var yearsDesc = state.years.slice().reverse();
 
-    var categoryOptions = '<option value="all"' + (filters.category === 'all' ? ' selected' : '') + '>All Categories</option>';
-    state.categories.forEach(function(cat) {
-      var selected = filters.category.toUpperCase() === cat.toUpperCase() ? ' selected' : '';
-      categoryOptions += '<option value="' + esc(cat) + '"' + selected + '>' + esc(cat) + '</option>';
-    });
-
-    var locationOptions = '<option value="all"' + (filters.location === 'all' ? ' selected' : '') + '>All Locations</option>';
-    state.locations.forEach(function(loc) {
-      var selected = filters.location === loc ? ' selected' : '';
-      locationOptions += '<option value="' + esc(loc) + '"' + selected + '>' + esc(loc) + '</option>';
-    });
-
-    var yearMinOptions = '<option value="all"' + (filters.yearMin === 'all' ? ' selected' : '') + '>Min</option>';
-    var yearMaxOptions = '<option value="all"' + (filters.yearMax === 'all' ? ' selected' : '') + '>Max</option>';
-    state.years.forEach(function(year) {
-      var selMin = filters.yearMin === String(year) ? ' selected' : '';
-      var selMax = filters.yearMax === String(year) ? ' selected' : '';
-      yearMinOptions += '<option value="' + year + '"' + selMin + '>' + year + '</option>';
-      yearMaxOptions += '<option value="' + year + '"' + selMax + '>' + year + '</option>';
-    });
+    // Determine the single selected year (if yearMin === yearMax and not 'all')
+    var selectedYear = 'all';
+    if (filters.yearMin !== 'all' && filters.yearMin === filters.yearMax) {
+      selectedYear = filters.yearMin;
+    }
 
     var clearBtn = hasActiveFilters ?
-      '<div class="arc-filter-group arc-filter-group--clear">' +
-        '<button class="arc-btn-clear" data-action="clear-filters">' +
-          '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>' +
-          'Clear' +
-        '</button>' +
-      '</div>' : '';
+      '<button class="arc-sidebar-clear" data-action="clear-filters">Clear All Filters</button>' : '';
 
-    return '' +
-    '<div class="arc-header">' +
-      '<div class="arc-header-inner">' +
-        '<div class="arc-header-top">' +
-          '<div>' +
-            '<p class="arc-subtitle">Showing ' + state.filteredInventory.length + ' of ' + state.stats.total + ' vehicles</p>' +
-          '</div>' +
-          '<div class="arc-stats">' +
-            '<span class="arc-stat-badge arc-stat-badge--new">' + state.stats.new + ' New</span>' +
-            '<span class="arc-stat-badge arc-stat-badge--used">' + state.stats.used + ' Used</span>' +
-          '</div>' +
-        '</div>' +
-        '<div class="arc-filters">' +
-          '<div class="arc-filter-group arc-filter-group--search">' +
-            '<label class="arc-filter-label">Search</label>' +
-            '<div class="arc-search-wrapper">' +
-              '<svg class="arc-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>' +
-              '<input type="text" class="arc-filter-input" data-filter="search" placeholder="Stock #, Make, or Model..." value="' + esc(filters.search) + '">' +
-            '</div>' +
-          '</div>' +
-          '<div class="arc-filter-group">' +
-            '<label class="arc-filter-label">Condition</label>' +
-            '<select class="arc-filter-select" data-filter="condition">' +
-              '<option value="all"' + (filters.condition === 'all' ? ' selected' : '') + '>All Conditions</option>' +
-              '<option value="New"' + (filters.condition === 'New' ? ' selected' : '') + '>New</option>' +
-              '<option value="Used"' + (filters.condition === 'Used' ? ' selected' : '') + '>Used</option>' +
-            '</select>' +
-          '</div>' +
-          '<div class="arc-filter-group">' +
-            '<label class="arc-filter-label">Make</label>' +
-            '<select class="arc-filter-select" data-filter="make">' + makesOptions + '</select>' +
-          '</div>' +
-          '<div class="arc-filter-group">' +
-            '<label class="arc-filter-label">Category</label>' +
-            '<select class="arc-filter-select" data-filter="category">' + categoryOptions + '</select>' +
-          '</div>' +
-          '<div class="arc-filter-group">' +
-            '<label class="arc-filter-label">Location</label>' +
-            '<select class="arc-filter-select" data-filter="location">' + locationOptions + '</select>' +
-          '</div>' +
-          '<div class="arc-filter-group arc-filter-group--year">' +
-            '<label class="arc-filter-label">Year</label>' +
-            '<div class="arc-year-range">' +
-              '<select class="arc-filter-select" data-filter="yearMin">' + yearMinOptions + '</select>' +
-              '<span class="arc-year-separator">to</span>' +
-              '<select class="arc-filter-select" data-filter="yearMax">' + yearMaxOptions + '</select>' +
-            '</div>' +
-          '</div>' +
-          clearBtn +
+    return '<aside class="arc-sidebar">' +
+      '<div class="arc-sidebar-search">' +
+        '<div class="arc-search-wrapper">' +
+          '<svg class="arc-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>' +
+          '<input type="text" class="arc-filter-input" data-filter="search" placeholder="Search inventory..." value="' + esc(filters.search) + '">' +
         '</div>' +
       '</div>' +
+      ARC.renderer.filterSection('Condition', 'condition', ['New', 'Used'], filters.condition, counts.condition) +
+      ARC.renderer.filterSection('Make', 'make', state.makes, filters.make, counts.make) +
+      ARC.renderer.filterSection('Category', 'category', state.categories, filters.category, counts.category) +
+      ARC.renderer.filterSection('Location', 'location', state.locations, filters.location, counts.location) +
+      ARC.renderer.filterSection('Year', 'year', yearsDesc, selectedYear, counts.year) +
+      clearBtn +
+    '</aside>';
+  },
+
+  /**
+   * Render toolbar above the grid
+   */
+  toolbar: function() {
+    var state = ARC.state;
+    return '<div class="arc-toolbar">' +
+      '<span class="arc-toolbar-count">' + state.filteredInventory.length + ' Matches</span>' +
     '</div>';
   },
   
@@ -169,69 +163,28 @@ ARC.renderer = {
     var esc = ARC.formatters.escapeHtml;
     var detailUrl = ARC.renderer.getDetailUrl(item.stockNo);
 
-    // Build details list - only include items with data
-    var details = [];
+    // Build details table rows - only include items with data
+    var rows = [];
 
-    if (item.branch) {
-      details.push(
-        '<div class="arc-card-detail">' +
-          '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>' +
-          '<span>' + esc(item.branch) + '</span>' +
-        '</div>'
-      );
-    }
+    if (item.branch) rows.push('<tr><th>Location</th><td>' + esc(item.branch) + '</td></tr>');
 
     var odometerDisplay = ARC.formatters.odometer(item.odometer);
-    if (odometerDisplay) {
-      details.push(
-        '<div class="arc-card-detail">' +
-          '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>' +
-          '<span>' + odometerDisplay + '</span>' +
-        '</div>'
-      );
-    }
+    if (odometerDisplay) rows.push('<tr><th>Odometer</th><td>' + odometerDisplay + '</td></tr>');
 
     if (item.engineMfr) {
       var engineText = esc(item.engineMfr);
       if (item.horsepower) engineText += ' ' + esc(item.horsepower) + ' HP';
-      details.push(
-        '<div class="arc-card-detail">' +
-          '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>' +
-          '<span>' + engineText + '</span>' +
-        '</div>'
-      );
+      rows.push('<tr><th>Engine</th><td>' + engineText + '</td></tr>');
     }
 
     var gvwrDisplay = ARC.formatters.gvwr(item.gvwr);
-    if (gvwrDisplay) {
-      details.push(
-        '<div class="arc-card-detail">' +
-          '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l3 9a5.002 5.002 0 01-6.001 0M18 7l-3 9m-3-9l6-2m0 0V4"/></svg>' +
-          '<span>GVWR: ' + gvwrDisplay + '</span>' +
-        '</div>'
-      );
-    }
+    if (gvwrDisplay) rows.push('<tr><th>GVWR</th><td>' + gvwrDisplay + '</td></tr>');
 
-    if (item.wheelbase) {
-      details.push(
-        '<div class="arc-card-detail">' +
-          '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-2V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5"/></svg>' +
-          '<span>WB: ' + esc(item.wheelbase) + '"</span>' +
-        '</div>'
-      );
-    }
+    if (item.wheelbase) rows.push('<tr><th>Wheelbase</th><td>' + esc(item.wheelbase) + '"</td></tr>');
+    if (item.suspension) rows.push('<tr><th>Suspension</th><td>' + esc(item.suspension) + '</td></tr>');
 
-    if (item.suspension) {
-      details.push(
-        '<div class="arc-card-detail">' +
-          '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>' +
-          '<span>' + esc(item.suspension) + '</span>' +
-        '</div>'
-      );
-    }
-
-    var detailsHtml = details.length > 0 ?
-      '<div class="arc-card-details">' + details.join('') + '</div>' : '';
+    var detailsHtml = rows.length > 0 ?
+      '<table class="arc-card-details"><tbody>' + rows.join('') + '</tbody></table>' : '';
 
     return '' +
     '<div class="arc-card" data-stock="' + item.stockNo + '">' +
@@ -241,10 +194,6 @@ ARC.renderer = {
           '<h3 class="arc-card-title">' + esc(item.year) + ' ' + esc(item.make) + '</h3>' +
         '</a>' +
         '<p class="arc-card-model">' + esc(item.model) + '</p>' +
-        '<div class="arc-card-price-row">' +
-          '<span class="arc-card-price">' + ARC.formatters.price(item.ourPrice) + '</span>' +
-          '<span class="arc-card-stock">#' + esc(item.stockNo) + '</span>' +
-        '</div>' +
         detailsHtml +
         ARC.renderer.specs(item) +
         '<a href="' + detailUrl + '" class="arc-btn-details" data-action="view-detail" data-stock="' + item.stockNo + '">View Details</a>' +
@@ -417,6 +366,11 @@ ARC.renderer = {
         e.preventDefault();
         ARC.app.clearFilters();
         break;
+      case 'toggle-section':
+        e.preventDefault();
+        var section = target.closest('.arc-filter-section');
+        if (section) section.classList.toggle('arc-filter-section--open');
+        break;
       case 'view-detail':
         e.preventDefault();
         ARC.app.viewDetail(stockNo);
@@ -441,13 +395,25 @@ ARC.renderer = {
   },
   
   /**
-   * Handle change events (dropdowns)
+   * Handle change events (dropdowns and radio buttons)
    */
   handleChange: function(e) {
     var target = e.target;
     if (!target.dataset.filter) return;
-    
-    ARC.app.setFilter(target.dataset.filter, target.value);
+
+    var filterKey = target.dataset.filter;
+    var value = target.value;
+
+    // Year radio sets both yearMin and yearMax
+    if (filterKey === 'year') {
+      ARC.state.filters.yearMin = value;
+      ARC.state.filters.yearMax = value;
+      ARC.state.filteredInventory = ARC.filters.apply(ARC.state.inventory, ARC.state.filters);
+      ARC.renderer.render();
+      return;
+    }
+
+    ARC.app.setFilter(filterKey, value);
   }
   
 };
