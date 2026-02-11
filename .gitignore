@@ -36,6 +36,7 @@ yarn-error.log
 
 # Composer
 vendor/
+!plugin-update-checker/vendor/
 composer.lock
 
 # Environment files
