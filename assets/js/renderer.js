@@ -37,6 +37,11 @@ ARC.renderer = {
       }
     }
 
+    // Preserve search input focus and cursor position across re-render
+    var searchInput = container.querySelector('[data-filter="search"]');
+    var hadFocus = searchInput && document.activeElement === searchInput;
+    var cursorPos = hadFocus ? searchInput.selectionStart : 0;
+
     container.innerHTML =
       '<div class="arc-layout">' +
         ARC.renderer.sidebar() +
@@ -47,6 +52,15 @@ ARC.renderer = {
       '</div>';
 
     ARC.renderer.bindEvents();
+
+    // Restore search input focus
+    if (hadFocus) {
+      var newInput = container.querySelector('[data-filter="search"]');
+      if (newInput) {
+        newInput.focus();
+        newInput.setSelectionRange(cursorPos, cursorPos);
+      }
+    }
   },
 
   /**
