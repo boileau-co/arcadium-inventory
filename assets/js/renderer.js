@@ -191,8 +191,10 @@ ARC.renderer = {
         '<p class="arc-card-model">' + esc(item.model) + '</p>' +
         detailsHtml +
         ARC.renderer.specs(item) +
-        '<a href="' + detailUrl + '" class="arc-btn-details" data-action="view-detail" data-stock="' + item.stockNo + '">View Details</a>' +
-        (ARC.config.leadEmailConfigured ? '<button class="arc-btn-message" data-action="open-lead-modal" data-stock="' + esc(item.stockNo) + '">Send Message</button>' : '') +
+        '<div class="arc-card-buttons">' +
+          '<a href="' + detailUrl + '" class="arc-btn-details" data-action="view-detail" data-stock="' + item.stockNo + '">View Details</a>' +
+          (ARC.config.leadEmailConfigured ? '<button class="arc-btn-message" data-action="open-lead-modal" data-stock="' + esc(item.stockNo) + '">Send Message</button>' : '') +
+        '</div>' +
       '</div>' +
     '</div>';
   },

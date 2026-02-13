@@ -38,9 +38,6 @@
 .arc-layout {
   display: flex;
   gap: 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 var(--arc-container-padding);
 }
 
 @media (max-width: 767px) {
@@ -404,11 +401,23 @@
   cursor: pointer;
 }
 
+.arc-card-buttons {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+@media (max-width: 640px) {
+  .arc-card-buttons {
+    flex-direction: column;
+  }
+}
+
 .arc-btn-details {
   display: block;
   text-align: center;
   padding: 0.5rem 1rem;
-  margin-top: 0.75rem;
+  flex: 1;
   font-size: 0.875rem;
   font-weight: 600;
   text-decoration: none;
@@ -417,6 +426,31 @@
   color: #374151;
   background: #fff;
   cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.arc-btn-details:hover {
+  background: #f9fafb;
+}
+
+.arc-btn-message {
+  display: block;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid #1f2937;
+  border-radius: var(--arc-border-radius);
+  color: #fff;
+  background: #1f2937;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.arc-btn-message:hover {
+  background: #111827;
 }
 
 /**
@@ -607,6 +641,25 @@
   font-weight: 500;
   border-radius: var(--arc-border-radius);
   background: #f3f4f6;
+}
+
+.arc-btn-lead {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid #1f2937;
+  border-radius: var(--arc-border-radius);
+  color: #fff;
+  background: #1f2937;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.arc-btn-lead:hover {
+  background: #111827;
 }
 
 .arc-detail-specs {
