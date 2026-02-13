@@ -489,8 +489,13 @@
 .arc-card-details th,
 .arc-card-details td {
   padding: 0.375rem 0;
+  padding-left: 0;
+  padding-right: 0;
   font-size: 0.8125rem;
   text-align: left;
+  border-left: 0;
+  border-right: 0;
+  border-top: 0;
   border-bottom: 1px solid #e5e7eb;
 }
 
@@ -503,7 +508,6 @@
   color: inherit;
   opacity: 0.6;
   width: 40%;
-  /* Left/right padding removed - card padding creates spacing */
   /* font-weight removed - will use <strong> tag in HTML */
 }
 
@@ -698,8 +702,13 @@
 .arc-detail-specs th,
 .arc-detail-specs td {
   padding: 0.5rem 0;
+  padding-left: 0;
+  padding-right: 0;
   text-align: left;
   font-size: 0.875rem;
+  border-left: 0;
+  border-right: 0;
+  border-top: 0;
   border-bottom: 1px solid #e5e7eb;
 }
 
@@ -707,7 +716,6 @@
   width: 40%;
   color: inherit;
   opacity: 0.6;
-  /* Left/right padding removed */
   /* font-weight removed - will use <strong> tag in HTML */
 }
 
