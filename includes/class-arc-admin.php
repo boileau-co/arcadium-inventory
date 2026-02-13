@@ -317,7 +317,7 @@ class ARC_Inventory_Admin {
      */
     public function color_button_bg_callback() {
         $value = get_option('arc_color_button_bg', '#1f2937');
-        echo '<input type="text" name="arc_color_button_bg" value="' . esc_attr($value) . '" class="color-picker" />';
+        echo '<input type="color" name="arc_color_button_bg" value="' . esc_attr($value) . '" />';
         echo '<p class="description">Background color for "Send Message" buttons. Default: #1f2937</p>';
     }
 
@@ -326,7 +326,7 @@ class ARC_Inventory_Admin {
      */
     public function color_button_text_callback() {
         $value = get_option('arc_color_button_text', '#ffffff');
-        echo '<input type="text" name="arc_color_button_text" value="' . esc_attr($value) . '" class="color-picker" />';
+        echo '<input type="color" name="arc_color_button_text" value="' . esc_attr($value) . '" />';
         echo '<p class="description">Text color for "Send Message" buttons. Default: #ffffff</p>';
     }
 
@@ -335,7 +335,7 @@ class ARC_Inventory_Admin {
      */
     public function color_outlined_button_border_callback() {
         $value = get_option('arc_color_outlined_button_border', '#d1d5db');
-        echo '<input type="text" name="arc_color_outlined_button_border" value="' . esc_attr($value) . '" class="color-picker" />';
+        echo '<input type="color" name="arc_color_outlined_button_border" value="' . esc_attr($value) . '" />';
         echo '<p class="description">Border color for "View Details" buttons. Default: #d1d5db</p>';
     }
 
@@ -344,7 +344,7 @@ class ARC_Inventory_Admin {
      */
     public function color_chip_new_bg_callback() {
         $value = get_option('arc_color_chip_new_bg', '#10b981');
-        echo '<input type="text" name="arc_color_chip_new_bg" value="' . esc_attr($value) . '" class="color-picker" />';
+        echo '<input type="color" name="arc_color_chip_new_bg" value="' . esc_attr($value) . '" />';
         echo '<p class="description">Background color for "New" condition badge. Default: #10b981 (green)</p>';
     }
 
@@ -353,7 +353,7 @@ class ARC_Inventory_Admin {
      */
     public function color_chip_new_text_callback() {
         $value = get_option('arc_color_chip_new_text', '#ffffff');
-        echo '<input type="text" name="arc_color_chip_new_text" value="' . esc_attr($value) . '" class="color-picker" />';
+        echo '<input type="color" name="arc_color_chip_new_text" value="' . esc_attr($value) . '" />';
         echo '<p class="description">Text color for "New" condition badge. Default: #ffffff</p>';
     }
 
@@ -362,7 +362,7 @@ class ARC_Inventory_Admin {
      */
     public function color_chip_used_bg_callback() {
         $value = get_option('arc_color_chip_used_bg', '#3b82f6');
-        echo '<input type="text" name="arc_color_chip_used_bg" value="' . esc_attr($value) . '" class="color-picker" />';
+        echo '<input type="color" name="arc_color_chip_used_bg" value="' . esc_attr($value) . '" />';
         echo '<p class="description">Background color for "Used" condition badge. Default: #3b82f6 (blue)</p>';
     }
 
@@ -371,7 +371,7 @@ class ARC_Inventory_Admin {
      */
     public function color_chip_used_text_callback() {
         $value = get_option('arc_color_chip_used_text', '#ffffff');
-        echo '<input type="text" name="arc_color_chip_used_text" value="' . esc_attr($value) . '" class="color-picker" />';
+        echo '<input type="color" name="arc_color_chip_used_text" value="' . esc_attr($value) . '" />';
         echo '<p class="description">Text color for "Used" condition badge. Default: #ffffff</p>';
     }
 
