@@ -266,13 +266,12 @@ class ARC_Inventory_API {
             // Prepare email
             $subject = 'New Lead: ' . $year . ' ' . $make . ' ' . $model;
             $headers = array(
-                'Content-Type: text/plain; charset=UTF-8',
-                'From: ' . get_bloginfo('name') . ' <wordpress@' . wp_parse_url(home_url(), PHP_URL_HOST) . '>'
+                'Content-Type: text/plain; charset=UTF-8'
             );
 
             $debug[] = 'Sending email to: ' . $lead_email;
 
-            // Send email
+            // Send email (WordPress will use default From address)
             $sent = wp_mail($lead_email, $subject, $adf_xml, $headers);
 
             $debug[] = 'wp_mail returned: ' . ($sent ? 'true' : 'false');
