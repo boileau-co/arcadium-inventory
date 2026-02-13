@@ -30,6 +30,13 @@ class ARC_Inventory_Public {
             ARC_INVENTORY_VERSION
         );
 
+        wp_enqueue_style(
+            'arc-modal-styles',
+            ARC_INVENTORY_PLUGIN_URL . 'assets/css/modal.css',
+            array('arc-inventory-styles'),
+            ARC_INVENTORY_VERSION
+        );
+
         // Enqueue scripts in dependency order
         wp_enqueue_script(
             'arc-config',
@@ -72,9 +79,17 @@ class ARC_Inventory_Public {
         );
 
         wp_enqueue_script(
+            'arc-modal',
+            ARC_INVENTORY_PLUGIN_URL . 'assets/js/modal.js',
+            array('arc-config', 'arc-formatters'),
+            ARC_INVENTORY_VERSION,
+            true
+        );
+
+        wp_enqueue_script(
             'arc-app',
             ARC_INVENTORY_PLUGIN_URL . 'assets/js/app.js',
-            array('arc-config', 'arc-formatters', 'arc-filters', 'arc-gallery', 'arc-renderer'),
+            array('arc-config', 'arc-formatters', 'arc-filters', 'arc-gallery', 'arc-renderer', 'arc-modal'),
             ARC_INVENTORY_VERSION,
             true
         );
@@ -82,8 +97,11 @@ class ARC_Inventory_Public {
         // Localize script with WordPress data
         wp_localize_script('arc-config', 'ARC_WP_Config', array(
             'dataUrl' => rest_url('arc/v1/inventory'),
+            'leadUrl' => rest_url('arc/v1/lead'),
             'nonce' => wp_create_nonce('wp_rest'),
-            'itemsPerPage' => get_option('arc_items_per_page', 12)
+            'leadNonce' => wp_create_nonce('arc_lead_nonce'),
+            'itemsPerPage' => get_option('arc_items_per_page', 12),
+            'leadEmailConfigured' => !empty(get_option('arc_adf_lead_email'))
         ));
     }
 

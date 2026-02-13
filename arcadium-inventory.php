@@ -77,6 +77,9 @@ function arc_inventory_activate() {
     add_option('arc_xml_feed_url', '');
     add_option('arc_cache_duration', 3600); // 1 hour default
     add_option('arc_items_per_page', 12);
+    add_option('arc_adf_lead_email', '');
+    add_option('arc_adf_vendor_name', '');
+    add_option('arc_adf_vendor_phone', '');
 
     // Flush rewrite rules
     flush_rewrite_rules();

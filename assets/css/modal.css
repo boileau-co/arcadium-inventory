@@ -1,0 +1,324 @@
+/**
+ * ARC Inventory - Modal Styles
+ *
+ * Lead capture modal component styling
+ */
+
+/* Modal Container */
+.arc-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+}
+
+.arc-modal--open {
+  display: flex;
+}
+
+/* Prevent body scroll when modal is open */
+body.arc-modal-open {
+  overflow: hidden;
+}
+
+/* Modal Overlay */
+.arc-modal__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+/* Modal Dialog */
+.arc-modal__dialog {
+  position: relative;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+}
+
+/* Modal Header */
+.arc-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.arc-modal__title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.arc-modal__close {
+  background: none;
+  border: none;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.arc-modal__close:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+/* Modal Body */
+.arc-modal__body {
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+/* Vehicle Info Display */
+.arc-modal__vehicle-info {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+.arc-modal__vehicle-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+/* Lead Form */
+.arc-lead-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Form Row */
+.arc-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Form Field */
+.arc-form__field {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Form Label */
+.arc-form__label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.arc-form__required {
+  color: #dc2626;
+  margin-left: 0.25rem;
+}
+
+/* Form Inputs */
+.arc-form__input,
+.arc-form__textarea {
+  padding: 0.625rem 0.875rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #111827;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.arc-form__input:focus,
+.arc-form__textarea:focus {
+  outline: none;
+  border-color: #ff7144;
+  box-shadow: 0 0 0 3px rgba(255, 113, 68, 0.1);
+}
+
+.arc-form__input::placeholder,
+.arc-form__textarea::placeholder {
+  color: #9ca3af;
+}
+
+.arc-form__textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Honeypot Field (Hidden) */
+.arc-form__honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  tab-index: -1;
+}
+
+/* Form Actions */
+.arc-form__actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+/* Buttons */
+.arc-btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.arc-btn--primary {
+  background: #ff7144;
+  color: #fff;
+}
+
+.arc-btn--primary:hover {
+  background: #ff5722;
+}
+
+.arc-btn--primary:active {
+  background: #e64a19;
+}
+
+.arc-btn--primary:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.arc-btn--secondary {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.arc-btn--secondary:hover {
+  background: #e5e7eb;
+}
+
+.arc-btn--secondary:active {
+  background: #d1d5db;
+}
+
+/* Form Message */
+.arc-form__message {
+  padding: 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-top: 1rem;
+}
+
+.arc-form__message--success {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.arc-form__message--error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+/* Loading State */
+.arc-form--loading .arc-form__input,
+.arc-form--loading .arc-form__textarea {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.arc-form--loading .arc-btn--primary {
+  position: relative;
+  color: transparent;
+}
+
+.arc-form--loading .arc-btn--primary::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: arc-spinner 0.6s linear infinite;
+}
+
+@keyframes arc-spinner {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive: Mobile */
+@media (max-width: 640px) {
+  .arc-modal__dialog {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    border-radius: 0;
+  }
+
+  .arc-modal__header {
+    padding: 1rem;
+  }
+
+  .arc-modal__body {
+    padding: 1rem;
+  }
+
+  .arc-form__row {
+    grid-template-columns: 1fr;
+  }
+
+  .arc-form__actions {
+    flex-direction: column;
+  }
+
+  .arc-btn {
+    width: 100%;
+  }
+}
+
+/* Responsive: Tablet */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .arc-modal__dialog {
+    max-width: 500px;
+  }
+}
