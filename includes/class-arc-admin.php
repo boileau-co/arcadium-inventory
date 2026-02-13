@@ -48,11 +48,36 @@ class ARC_Inventory_Admin {
             'default' => 12
         ));
 
+        register_setting('arc_inventory_settings', 'arc_adf_lead_email', array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_email',
+            'default' => ''
+        ));
+
+        register_setting('arc_inventory_settings', 'arc_adf_vendor_name', array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_text_field',
+            'default' => ''
+        ));
+
+        register_setting('arc_inventory_settings', 'arc_adf_vendor_phone', array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_text_field',
+            'default' => ''
+        ));
+
         // Add settings sections
         add_settings_section(
             'arc_main_settings',
             'Main Settings',
             array($this, 'main_settings_section_callback'),
+            'arcadium-inventory'
+        );
+
+        add_settings_section(
+            'arc_lead_capture_settings',
+            'Lead Capture Settings',
+            array($this, 'lead_capture_settings_section_callback'),
             'arcadium-inventory'
         );
 
@@ -79,6 +104,30 @@ class ARC_Inventory_Admin {
             array($this, 'items_per_page_callback'),
             'arcadium-inventory',
             'arc_main_settings'
+        );
+
+        add_settings_field(
+            'arc_adf_lead_email',
+            'ADF Lead Email Address',
+            array($this, 'adf_lead_email_callback'),
+            'arcadium-inventory',
+            'arc_lead_capture_settings'
+        );
+
+        add_settings_field(
+            'arc_adf_vendor_name',
+            'Vendor Name',
+            array($this, 'adf_vendor_name_callback'),
+            'arcadium-inventory',
+            'arc_lead_capture_settings'
+        );
+
+        add_settings_field(
+            'arc_adf_vendor_phone',
+            'Vendor Phone',
+            array($this, 'adf_vendor_phone_callback'),
+            'arcadium-inventory',
+            'arc_lead_capture_settings'
         );
     }
 
@@ -114,6 +163,40 @@ class ARC_Inventory_Admin {
         $value = get_option('arc_items_per_page', 12);
         echo '<input type="number" name="arc_items_per_page" value="' . esc_attr($value) . '" class="small-text" min="1" />';
         echo '<p class="description">Number of inventory items to display per page. Default: 12.</p>';
+    }
+
+    /**
+     * Lead capture settings section callback
+     */
+    public function lead_capture_settings_section_callback() {
+        echo '<p>Configure ADF/XML lead capture settings. Lead forms will only appear if the ADF Lead Email is configured.</p>';
+    }
+
+    /**
+     * ADF Lead Email field callback
+     */
+    public function adf_lead_email_callback() {
+        $value = get_option('arc_adf_lead_email', '');
+        echo '<input type="email" name="arc_adf_lead_email" value="' . esc_attr($value) . '" class="regular-text" />';
+        echo '<p class="description">Email address where ADF/XML leads will be sent. The lead capture form will only appear if this is configured.</p>';
+    }
+
+    /**
+     * ADF Vendor Name field callback
+     */
+    public function adf_vendor_name_callback() {
+        $value = get_option('arc_adf_vendor_name', '');
+        echo '<input type="text" name="arc_adf_vendor_name" value="' . esc_attr($value) . '" class="regular-text" />';
+        echo '<p class="description">Your business/vendor name for ADF submissions. If left empty, the vehicle branch/location will be used.</p>';
+    }
+
+    /**
+     * ADF Vendor Phone field callback
+     */
+    public function adf_vendor_phone_callback() {
+        $value = get_option('arc_adf_vendor_phone', '');
+        echo '<input type="tel" name="arc_adf_vendor_phone" value="' . esc_attr($value) . '" class="regular-text" />';
+        echo '<p class="description">Your business phone number for ADF submissions.</p>';
     }
 
     /**

@@ -192,6 +192,7 @@ ARC.renderer = {
         detailsHtml +
         ARC.renderer.specs(item) +
         '<a href="' + detailUrl + '" class="arc-btn-details" data-action="view-detail" data-stock="' + item.stockNo + '">View Details</a>' +
+        (ARC.config.leadEmailConfigured ? '<button class="arc-btn-message" data-action="open-lead-modal" data-stock="' + esc(item.stockNo) + '">Send Message</button>' : '') +
       '</div>' +
     '</div>';
   },
@@ -273,6 +274,7 @@ ARC.renderer = {
               '<span class="arc-detail-price">' + ARC.formatters.price(item.ourPrice) + '</span>' +
               '<span class="arc-detail-stock">#' + esc(item.stockNo) + '</span>' +
             '</div>' +
+            (ARC.config.leadEmailConfigured ? '<button class="arc-btn-lead" data-action="open-lead-modal" data-stock="' + esc(item.stockNo) + '">Send Message About This Vehicle</button>' : '') +
             '<table class="arc-detail-specs">' +
               '<tbody>' + rows.join('') + '</tbody>' +
             '</table>' +
@@ -373,6 +375,15 @@ ARC.renderer = {
       case 'back-to-listing':
         e.preventDefault();
         ARC.app.backToListing();
+        break;
+      case 'open-lead-modal':
+        e.preventDefault();
+        var vehicle = ARC.state.inventory.find(function(item) {
+          return item.stockNo === stockNo;
+        });
+        if (vehicle) {
+          ARC.modal.open(vehicle);
+        }
         break;
     }
   },
