@@ -122,7 +122,7 @@ ARC.gallery = {
    */
   renderBadge: function(condition) {
     var cls = condition === 'New' ? 'arc-badge--new' : 'arc-badge--used';
-    return '<span class="arc-badge ' + cls + '">' + condition + '</span>';
+    return '<span class="arc-badge ' + cls + '"><strong>' + condition + '</strong></span>';
   },
   
   /**

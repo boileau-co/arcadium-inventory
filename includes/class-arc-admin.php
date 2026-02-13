@@ -66,6 +66,49 @@ class ARC_Inventory_Admin {
             'default' => ''
         ));
 
+        // Color customization settings
+        register_setting('arc_inventory_settings', 'arc_color_button_bg', array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_hex_color',
+            'default' => '#1f2937'
+        ));
+
+        register_setting('arc_inventory_settings', 'arc_color_button_text', array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_hex_color',
+            'default' => '#ffffff'
+        ));
+
+        register_setting('arc_inventory_settings', 'arc_color_outlined_button_border', array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_hex_color',
+            'default' => '#d1d5db'
+        ));
+
+        register_setting('arc_inventory_settings', 'arc_color_chip_new_bg', array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_hex_color',
+            'default' => '#10b981'
+        ));
+
+        register_setting('arc_inventory_settings', 'arc_color_chip_new_text', array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_hex_color',
+            'default' => '#ffffff'
+        ));
+
+        register_setting('arc_inventory_settings', 'arc_color_chip_used_bg', array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_hex_color',
+            'default' => '#3b82f6'
+        ));
+
+        register_setting('arc_inventory_settings', 'arc_color_chip_used_text', array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_hex_color',
+            'default' => '#ffffff'
+        ));
+
         // Add settings sections
         add_settings_section(
             'arc_main_settings',
@@ -78,6 +121,13 @@ class ARC_Inventory_Admin {
             'arc_lead_capture_settings',
             'Lead Capture Settings',
             array($this, 'lead_capture_settings_section_callback'),
+            'arcadium-inventory'
+        );
+
+        add_settings_section(
+            'arc_color_settings',
+            'Color Customization',
+            array($this, 'color_settings_section_callback'),
             'arcadium-inventory'
         );
 
@@ -128,6 +178,62 @@ class ARC_Inventory_Admin {
             array($this, 'adf_vendor_phone_callback'),
             'arcadium-inventory',
             'arc_lead_capture_settings'
+        );
+
+        add_settings_field(
+            'arc_color_button_bg',
+            'Button Background Color',
+            array($this, 'color_button_bg_callback'),
+            'arcadium-inventory',
+            'arc_color_settings'
+        );
+
+        add_settings_field(
+            'arc_color_button_text',
+            'Button Text Color',
+            array($this, 'color_button_text_callback'),
+            'arcadium-inventory',
+            'arc_color_settings'
+        );
+
+        add_settings_field(
+            'arc_color_outlined_button_border',
+            'Outlined Button Border Color',
+            array($this, 'color_outlined_button_border_callback'),
+            'arcadium-inventory',
+            'arc_color_settings'
+        );
+
+        add_settings_field(
+            'arc_color_chip_new_bg',
+            '"New" Chip Background Color',
+            array($this, 'color_chip_new_bg_callback'),
+            'arcadium-inventory',
+            'arc_color_settings'
+        );
+
+        add_settings_field(
+            'arc_color_chip_new_text',
+            '"New" Chip Text Color',
+            array($this, 'color_chip_new_text_callback'),
+            'arcadium-inventory',
+            'arc_color_settings'
+        );
+
+        add_settings_field(
+            'arc_color_chip_used_bg',
+            '"Used" Chip Background Color',
+            array($this, 'color_chip_used_bg_callback'),
+            'arcadium-inventory',
+            'arc_color_settings'
+        );
+
+        add_settings_field(
+            'arc_color_chip_used_text',
+            '"Used" Chip Text Color',
+            array($this, 'color_chip_used_text_callback'),
+            'arcadium-inventory',
+            'arc_color_settings'
         );
     }
 
@@ -197,6 +303,76 @@ class ARC_Inventory_Admin {
         $value = get_option('arc_adf_vendor_phone', '');
         echo '<input type="tel" name="arc_adf_vendor_phone" value="' . esc_attr($value) . '" class="regular-text" />';
         echo '<p class="description">Your business phone number for ADF submissions.</p>';
+    }
+
+    /**
+     * Color settings section callback
+     */
+    public function color_settings_section_callback() {
+        echo '<p>Customize button and chip colors. Leave blank to use theme defaults.</p>';
+    }
+
+    /**
+     * Button Background Color field callback
+     */
+    public function color_button_bg_callback() {
+        $value = get_option('arc_color_button_bg', '#1f2937');
+        echo '<input type="text" name="arc_color_button_bg" value="' . esc_attr($value) . '" class="color-picker" />';
+        echo '<p class="description">Background color for "Send Message" buttons. Default: #1f2937</p>';
+    }
+
+    /**
+     * Button Text Color field callback
+     */
+    public function color_button_text_callback() {
+        $value = get_option('arc_color_button_text', '#ffffff');
+        echo '<input type="text" name="arc_color_button_text" value="' . esc_attr($value) . '" class="color-picker" />';
+        echo '<p class="description">Text color for "Send Message" buttons. Default: #ffffff</p>';
+    }
+
+    /**
+     * Outlined Button Border Color field callback
+     */
+    public function color_outlined_button_border_callback() {
+        $value = get_option('arc_color_outlined_button_border', '#d1d5db');
+        echo '<input type="text" name="arc_color_outlined_button_border" value="' . esc_attr($value) . '" class="color-picker" />';
+        echo '<p class="description">Border color for "View Details" buttons. Default: #d1d5db</p>';
+    }
+
+    /**
+     * New Chip Background Color field callback
+     */
+    public function color_chip_new_bg_callback() {
+        $value = get_option('arc_color_chip_new_bg', '#10b981');
+        echo '<input type="text" name="arc_color_chip_new_bg" value="' . esc_attr($value) . '" class="color-picker" />';
+        echo '<p class="description">Background color for "New" condition badge. Default: #10b981 (green)</p>';
+    }
+
+    /**
+     * New Chip Text Color field callback
+     */
+    public function color_chip_new_text_callback() {
+        $value = get_option('arc_color_chip_new_text', '#ffffff');
+        echo '<input type="text" name="arc_color_chip_new_text" value="' . esc_attr($value) . '" class="color-picker" />';
+        echo '<p class="description">Text color for "New" condition badge. Default: #ffffff</p>';
+    }
+
+    /**
+     * Used Chip Background Color field callback
+     */
+    public function color_chip_used_bg_callback() {
+        $value = get_option('arc_color_chip_used_bg', '#3b82f6');
+        echo '<input type="text" name="arc_color_chip_used_bg" value="' . esc_attr($value) . '" class="color-picker" />';
+        echo '<p class="description">Background color for "Used" condition badge. Default: #3b82f6 (blue)</p>';
+    }
+
+    /**
+     * Used Chip Text Color field callback
+     */
+    public function color_chip_used_text_callback() {
+        $value = get_option('arc_color_chip_used_text', '#ffffff');
+        echo '<input type="text" name="arc_color_chip_used_text" value="' . esc_attr($value) . '" class="color-picker" />';
+        echo '<p class="description">Text color for "Used" condition badge. Default: #ffffff</p>';
     }
 
     /**

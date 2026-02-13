@@ -3,7 +3,7 @@
  * Plugin Name: Arcadium Inventory by Boileau & Co.
  * Plugin URI: https://github.com/boileau-co/arcadium-inventory
  * Description: A modular JavaScript application for displaying vehicle inventory with XML feed integration and advanced filtering.
- * Version: 1.5.0
+ * Version: 1.6.0
  * Author: Boileau & Co.
  * Author URI: https://boileauandco.com
  * Text Domain: arcadium-inventory
@@ -24,7 +24,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('ARC_INVENTORY_VERSION', '1.5.0');
+define('ARC_INVENTORY_VERSION', '1.6.0');
 define('ARC_INVENTORY_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('ARC_INVENTORY_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('ARC_INVENTORY_PLUGIN_FILE', __FILE__);
@@ -80,6 +80,15 @@ function arc_inventory_activate() {
     add_option('arc_adf_lead_email', '');
     add_option('arc_adf_vendor_name', '');
     add_option('arc_adf_vendor_phone', '');
+
+    // Color customization defaults
+    add_option('arc_color_button_bg', '#1f2937');
+    add_option('arc_color_button_text', '#ffffff');
+    add_option('arc_color_outlined_button_border', '#d1d5db');
+    add_option('arc_color_chip_new_bg', '#10b981');
+    add_option('arc_color_chip_new_text', '#ffffff');
+    add_option('arc_color_chip_used_bg', '#3b82f6');
+    add_option('arc_color_chip_used_text', '#ffffff');
 
     // Flush rewrite rules
     flush_rewrite_rules();
