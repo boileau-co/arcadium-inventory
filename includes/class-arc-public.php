@@ -37,6 +37,48 @@ class ARC_Inventory_Public {
             ARC_INVENTORY_VERSION
         );
 
+        // Inject custom color CSS variables
+        $custom_css = ':root {';
+
+        $button_bg = get_option('arc_color_button_bg', '#1f2937');
+        if (!empty($button_bg)) {
+            $custom_css .= '--arc-button-bg: ' . esc_attr($button_bg) . ';';
+            $custom_css .= '--arc-button-border: ' . esc_attr($button_bg) . ';';
+        }
+
+        $button_text = get_option('arc_color_button_text', '#ffffff');
+        if (!empty($button_text)) {
+            $custom_css .= '--arc-button-color: ' . esc_attr($button_text) . ';';
+        }
+
+        $outlined_border = get_option('arc_color_outlined_button_border', '#d1d5db');
+        if (!empty($outlined_border)) {
+            $custom_css .= '--arc-outlined-button-border: ' . esc_attr($outlined_border) . ';';
+        }
+
+        $chip_new_bg = get_option('arc_color_chip_new_bg', '#10b981');
+        if (!empty($chip_new_bg)) {
+            $custom_css .= '--arc-chip-new-bg: ' . esc_attr($chip_new_bg) . ';';
+        }
+
+        $chip_new_text = get_option('arc_color_chip_new_text', '#ffffff');
+        if (!empty($chip_new_text)) {
+            $custom_css .= '--arc-chip-new-color: ' . esc_attr($chip_new_text) . ';';
+        }
+
+        $chip_used_bg = get_option('arc_color_chip_used_bg', '#3b82f6');
+        if (!empty($chip_used_bg)) {
+            $custom_css .= '--arc-chip-used-bg: ' . esc_attr($chip_used_bg) . ';';
+        }
+
+        $chip_used_text = get_option('arc_color_chip_used_text', '#ffffff');
+        if (!empty($chip_used_text)) {
+            $custom_css .= '--arc-chip-used-color: ' . esc_attr($chip_used_text) . ';';
+        }
+
+        $custom_css .= '}';
+        wp_add_inline_style('arc-inventory-styles', $custom_css);
+
         // Enqueue scripts in dependency order
         wp_enqueue_script(
             'arc-config',

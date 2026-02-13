@@ -85,7 +85,7 @@ ARC.renderer = {
 
     return '<div class="arc-filter-section' + (isOpen ? ' arc-filter-section--open' : '') + '">' +
       '<button class="arc-filter-heading" data-action="toggle-section">' +
-        '<span>' + esc(title) + '</span>' +
+        '<strong>' + esc(title) + '</strong>' +
         '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>' +
       '</button>' +
       '<div class="arc-filter-list">' + items + '</div>' +
@@ -129,7 +129,7 @@ ARC.renderer = {
   toolbar: function() {
     var state = ARC.state;
     return '<div class="arc-toolbar">' +
-      '<span class="arc-toolbar-count">' + state.filteredInventory.length + ' Matches</span>' +
+      '<span class="arc-toolbar-count"><strong>' + state.filteredInventory.length + ' Matches</strong></span>' +
     '</div>';
   },
 
@@ -161,22 +161,22 @@ ARC.renderer = {
     // Build details table rows - only include items with data
     var rows = [];
 
-    if (item.branch) rows.push('<tr><th>Location</th><td>' + esc(item.branch) + '</td></tr>');
+    if (item.branch) rows.push('<tr><th><strong>Location</strong></th><td>' + esc(item.branch) + '</td></tr>');
 
     var odometerDisplay = ARC.formatters.odometer(item.odometer);
-    if (odometerDisplay) rows.push('<tr><th>Odometer</th><td>' + odometerDisplay + '</td></tr>');
+    if (odometerDisplay) rows.push('<tr><th><strong>Odometer</strong></th><td>' + odometerDisplay + '</td></tr>');
 
     if (item.engineMfr) {
       var engineText = esc(item.engineMfr);
       if (item.horsepower) engineText += ' ' + esc(item.horsepower) + ' HP';
-      rows.push('<tr><th>Engine</th><td>' + engineText + '</td></tr>');
+      rows.push('<tr><th><strong>Engine</strong></th><td>' + engineText + '</td></tr>');
     }
 
     var gvwrDisplay = ARC.formatters.gvwr(item.gvwr);
-    if (gvwrDisplay) rows.push('<tr><th>GVWR</th><td>' + gvwrDisplay + '</td></tr>');
+    if (gvwrDisplay) rows.push('<tr><th><strong>GVWR</strong></th><td>' + gvwrDisplay + '</td></tr>');
 
-    if (item.wheelbase) rows.push('<tr><th>Wheelbase</th><td>' + esc(item.wheelbase) + '"</td></tr>');
-    if (item.suspension) rows.push('<tr><th>Suspension</th><td>' + esc(item.suspension) + '</td></tr>');
+    if (item.wheelbase) rows.push('<tr><th><strong>Wheelbase</strong></th><td>' + esc(item.wheelbase) + '"</td></tr>');
+    if (item.suspension) rows.push('<tr><th><strong>Suspension</strong></th><td>' + esc(item.suspension) + '</td></tr>');
 
     var detailsHtml = rows.length > 0 ?
       '<table class="arc-card-details"><tbody>' + rows.join('') + '</tbody></table>' : '';
@@ -189,8 +189,8 @@ ARC.renderer = {
           '<h3 class="arc-card-title">' + esc(item.year) + ' ' + esc(item.make) + '</h3>' +
         '</a>' +
         '<p class="arc-card-model">' + esc(item.model) + '</p>' +
-        detailsHtml +
         ARC.renderer.specs(item) +
+        detailsHtml +
         '<div class="arc-card-buttons">' +
           '<a href="' + detailUrl + '" class="arc-btn-details" data-action="view-detail" data-stock="' + item.stockNo + '">View Details</a>' +
           (ARC.config.leadEmailConfigured ? '<button class="arc-btn-message" data-action="open-lead-modal" data-stock="' + esc(item.stockNo) + '">Send Message</button>' : '') +
@@ -233,26 +233,26 @@ ARC.renderer = {
     // Build specs table rows - only include fields with data
     var rows = [];
 
-    if (item.stockNo) rows.push('<tr><th>Stock #</th><td>' + esc(item.stockNo) + '</td></tr>');
-    if (item.vin) rows.push('<tr><th>VIN</th><td>' + esc(item.vin) + '</td></tr>');
-    if (item.condition) rows.push('<tr><th>Condition</th><td>' + esc(item.condition) + '</td></tr>');
-    if (item.type) rows.push('<tr><th>Type</th><td>' + esc(item.type) + '</td></tr>');
+    if (item.stockNo) rows.push('<tr><th><strong>Stock #</strong></th><td>' + esc(item.stockNo) + '</td></tr>');
+    if (item.vin) rows.push('<tr><th><strong>VIN</strong></th><td>' + esc(item.vin) + '</td></tr>');
+    if (item.condition) rows.push('<tr><th><strong>Condition</strong></th><td>' + esc(item.condition) + '</td></tr>');
+    if (item.type) rows.push('<tr><th><strong>Type</strong></th><td>' + esc(item.type) + '</td></tr>');
 
     var odometerDisplay = ARC.formatters.odometer(item.odometer);
-    if (odometerDisplay) rows.push('<tr><th>Odometer</th><td>' + odometerDisplay + '</td></tr>');
+    if (odometerDisplay) rows.push('<tr><th><strong>Odometer</strong></th><td>' + odometerDisplay + '</td></tr>');
 
-    if (item.engineMfr) rows.push('<tr><th>Engine</th><td>' + esc(item.engineMfr) + '</td></tr>');
-    if (item.horsepower) rows.push('<tr><th>Horsepower</th><td>' + esc(item.horsepower) + ' HP</td></tr>');
-    if (item.fuelType) rows.push('<tr><th>Fuel Type</th><td>' + esc(item.fuelType) + '</td></tr>');
+    if (item.engineMfr) rows.push('<tr><th><strong>Engine</strong></th><td>' + esc(item.engineMfr) + '</td></tr>');
+    if (item.horsepower) rows.push('<tr><th><strong>Horsepower</strong></th><td>' + esc(item.horsepower) + ' HP</td></tr>');
+    if (item.fuelType) rows.push('<tr><th><strong>Fuel Type</strong></th><td>' + esc(item.fuelType) + '</td></tr>');
 
     var gvwrDisplay = ARC.formatters.gvwr(item.gvwr);
-    if (gvwrDisplay) rows.push('<tr><th>GVWR</th><td>' + gvwrDisplay + '</td></tr>');
+    if (gvwrDisplay) rows.push('<tr><th><strong>GVWR</strong></th><td>' + gvwrDisplay + '</td></tr>');
 
-    if (item.wheelbase) rows.push('<tr><th>Wheelbase</th><td>' + esc(item.wheelbase) + '"</td></tr>');
-    if (item.suspension) rows.push('<tr><th>Suspension</th><td>' + esc(item.suspension) + '</td></tr>');
-    if (item.color) rows.push('<tr><th>Color</th><td>' + esc(item.color) + '</td></tr>');
-    if (item.bodyStyle) rows.push('<tr><th>Body Style</th><td>' + esc(item.bodyStyle) + '</td></tr>');
-    if (item.branch) rows.push('<tr><th>Location</th><td>' + esc(item.branch) + '</td></tr>');
+    if (item.wheelbase) rows.push('<tr><th><strong>Wheelbase</strong></th><td>' + esc(item.wheelbase) + '"</td></tr>');
+    if (item.suspension) rows.push('<tr><th><strong>Suspension</strong></th><td>' + esc(item.suspension) + '</td></tr>');
+    if (item.color) rows.push('<tr><th><strong>Color</strong></th><td>' + esc(item.color) + '</td></tr>');
+    if (item.bodyStyle) rows.push('<tr><th><strong>Body Style</strong></th><td>' + esc(item.bodyStyle) + '</td></tr>');
+    if (item.branch) rows.push('<tr><th><strong>Location</strong></th><td>' + esc(item.branch) + '</td></tr>');
 
     var galleryHtml = ARC.gallery.render(item, imageIndex);
 
@@ -272,8 +272,9 @@ ARC.renderer = {
           '<div class="arc-detail-info">' +
             '<h1 class="arc-detail-title">' + esc(item.year) + ' ' + esc(item.make) + '</h1>' +
             '<p class="arc-detail-model">' + esc(item.model) + '</p>' +
+            ARC.renderer.specs(item) +
             '<div class="arc-detail-price-row">' +
-              '<span class="arc-detail-price">' + ARC.formatters.price(item.ourPrice) + '</span>' +
+              '<strong class="arc-detail-price">' + ARC.formatters.price(item.ourPrice) + '</strong>' +
               '<span class="arc-detail-stock">#' + esc(item.stockNo) + '</span>' +
             '</div>' +
             (ARC.config.leadEmailConfigured ? '<button class="arc-btn-lead" data-action="open-lead-modal" data-stock="' + esc(item.stockNo) + '">Send Message About This Vehicle</button>' : '') +
