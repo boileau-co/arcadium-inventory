@@ -99,7 +99,6 @@ class ARC_Inventory_Public {
             'dataUrl' => rest_url('arc/v1/inventory'),
             'leadUrl' => rest_url('arc/v1/lead'),
             'nonce' => wp_create_nonce('wp_rest'),
-            'leadNonce' => wp_create_nonce('arc_lead_nonce'),
             'itemsPerPage' => get_option('arc_items_per_page', 12),
             'leadEmailConfigured' => !empty(get_option('arc_adf_lead_email'))
         ));
