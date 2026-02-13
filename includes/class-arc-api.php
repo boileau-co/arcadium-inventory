@@ -299,40 +299,40 @@ class ARC_Inventory_API {
         $xml .= '<?adf version="1.0" ?>' . "\n";
         $xml .= '<adf>' . "\n";
         $xml .= '  <prospect>' . "\n";
-        $xml .= '    <id sequence="1" source="' . esc_xml($site_name) . '"/>' . "\n";
-        $xml .= '    <requestdate>' . esc_xml($request_date) . '</requestdate>' . "\n";
-        $xml .= '    <vehicle interest="buy" status="' . esc_xml($status) . '">' . "\n";
+        $xml .= '    <id sequence="1" source="' . esc_html($site_name) . '"/>' . "\n";
+        $xml .= '    <requestdate>' . esc_html($request_date) . '</requestdate>' . "\n";
+        $xml .= '    <vehicle interest="buy" status="' . esc_html($status) . '">' . "\n";
         $xml .= '      <id sequence="1" source=""/>' . "\n";
-        $xml .= '      <year>' . esc_xml($data['year']) . '</year>' . "\n";
-        $xml .= '      <make>' . esc_xml($data['make']) . '</make>' . "\n";
-        $xml .= '      <model>' . esc_xml($data['model']) . '</model>' . "\n";
+        $xml .= '      <year>' . esc_html($data['year']) . '</year>' . "\n";
+        $xml .= '      <make>' . esc_html($data['make']) . '</make>' . "\n";
+        $xml .= '      <model>' . esc_html($data['model']) . '</model>' . "\n";
 
         if (!empty($data['vin'])) {
-            $xml .= '      <vin>' . esc_xml($data['vin']) . '</vin>' . "\n";
+            $xml .= '      <vin>' . esc_html($data['vin']) . '</vin>' . "\n";
         }
 
-        $xml .= '      <stock>' . esc_xml($data['stockNo']) . '</stock>' . "\n";
+        $xml .= '      <stock>' . esc_html($data['stockNo']) . '</stock>' . "\n";
         $xml .= '      <trim></trim>' . "\n";
 
         if (!empty($data['ourPrice']) && $data['ourPrice'] !== '0' && $data['ourPrice'] !== '0.000000000') {
             $price = floatval($data['ourPrice']);
-            $xml .= '      <price type="asking" currency="USD">' . esc_xml(number_format($price, 0, '.', '')) . '</price>' . "\n";
+            $xml .= '      <price type="asking" currency="USD">' . esc_html(number_format($price, 0, '.', '')) . '</price>' . "\n";
         }
 
         $xml .= '      <comments></comments>' . "\n";
         $xml .= '    </vehicle>' . "\n";
         $xml .= '    <customer>' . "\n";
         $xml .= '      <contact>' . "\n";
-        $xml .= '        <name part="first">' . esc_xml($data['firstName']) . '</name>' . "\n";
-        $xml .= '        <name part="last">' . esc_xml($data['lastName']) . '</name>' . "\n";
-        $xml .= '        <email preferedcontact="0">' . esc_xml($data['email']) . '</email>' . "\n";
+        $xml .= '        <name part="first">' . esc_html($data['firstName']) . '</name>' . "\n";
+        $xml .= '        <name part="last">' . esc_html($data['lastName']) . '</name>' . "\n";
+        $xml .= '        <email preferedcontact="0">' . esc_html($data['email']) . '</email>' . "\n";
 
         if (!empty($data['phone'])) {
-            $xml .= '        <phone type="voice" time="day" preferedcontact="0">' . esc_xml($data['phone']) . '</phone>' . "\n";
+            $xml .= '        <phone type="voice" time="day" preferedcontact="0">' . esc_html($data['phone']) . '</phone>' . "\n";
         }
 
         $xml .= '        <address type="home">' . "\n";
-        $xml .= '          <postalcode>' . esc_xml($data['postalCode']) . '</postalcode>' . "\n";
+        $xml .= '          <postalcode>' . esc_html($data['postalCode']) . '</postalcode>' . "\n";
         $xml .= '        </address>' . "\n";
         $xml .= '      </contact>' . "\n";
 
@@ -340,21 +340,21 @@ class ARC_Inventory_API {
         if (!empty($data['comments'])) {
             $customer_comments .= ' Customer Comments: ' . $data['comments'];
         }
-        $xml .= '      <comments>' . esc_xml($customer_comments) . '</comments>' . "\n";
+        $xml .= '      <comments>' . esc_html($customer_comments) . '</comments>' . "\n";
 
         $xml .= '    </customer>' . "\n";
         $xml .= '    <vendor>' . "\n";
         $xml .= '      <id></id>' . "\n";
 
         if (!empty($vendor_name)) {
-            $xml .= '      <vendorname>' . esc_xml($vendor_name) . '</vendorname>' . "\n";
+            $xml .= '      <vendorname>' . esc_html($vendor_name) . '</vendorname>' . "\n";
         }
 
         $xml .= '      <contact>' . "\n";
         $xml .= '        <name></name>' . "\n";
 
         if (!empty($vendor_phone)) {
-            $xml .= '        <phone type="voice" time="nopreference">' . esc_xml($vendor_phone) . '</phone>' . "\n";
+            $xml .= '        <phone type="voice" time="nopreference">' . esc_html($vendor_phone) . '</phone>' . "\n";
         } else {
             $xml .= '        <phone type="voice" time="nopreference"></phone>' . "\n";
         }
@@ -362,9 +362,9 @@ class ARC_Inventory_API {
         $xml .= '      </contact>' . "\n";
         $xml .= '    </vendor>' . "\n";
         $xml .= '    <provider>' . "\n";
-        $xml .= '      <name>' . esc_xml($site_name) . '</name>' . "\n";
+        $xml .= '      <name>' . esc_html($site_name) . '</name>' . "\n";
         $xml .= '      <service>Website</service>' . "\n";
-        $xml .= '      <url>' . esc_xml($site_url) . '</url>' . "\n";
+        $xml .= '      <url>' . esc_html($site_url) . '</url>' . "\n";
         $xml .= '    </provider>' . "\n";
         $xml .= '    <leadtype>Sales</leadtype>' . "\n";
         $xml .= '  </prospect>' . "\n";
