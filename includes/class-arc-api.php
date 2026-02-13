@@ -26,7 +26,6 @@ class ARC_Inventory_API {
             'callback' => array($this, 'submit_lead'),
             'permission_callback' => '__return_true',
             'args' => array(
-                'nonce' => array('required' => true, 'sanitize_callback' => 'sanitize_text_field'),
                 'firstName' => array('required' => true, 'sanitize_callback' => 'sanitize_text_field'),
                 'lastName' => array('required' => true, 'sanitize_callback' => 'sanitize_text_field'),
                 'email' => array('required' => true, 'sanitize_callback' => 'sanitize_email'),
@@ -180,16 +179,6 @@ class ARC_Inventory_API {
      * Submit lead form
      */
     public function submit_lead($request) {
-        // Verify nonce
-        $nonce = $request->get_param('nonce');
-        if (!wp_verify_nonce($nonce, 'arc_lead_nonce')) {
-            return new WP_Error(
-                'invalid_nonce',
-                'Security verification failed.',
-                array('status' => 403)
-            );
-        }
-
         // Check if lead email is configured
         $lead_email = get_option('arc_adf_lead_email');
         if (empty($lead_email)) {
