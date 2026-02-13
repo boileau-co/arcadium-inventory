@@ -179,95 +179,101 @@ class ARC_Inventory_API {
      * Submit lead form
      */
     public function submit_lead($request) {
-        // Check if lead email is configured
-        $lead_email = get_option('arc_adf_lead_email');
-        if (empty($lead_email)) {
-            return new WP_Error(
-                'no_lead_email',
-                'Lead capture is not configured. Please contact the site administrator.',
-                array('status' => 400)
-            );
-        }
+        try {
+            // Check if lead email is configured
+            $lead_email = get_option('arc_adf_lead_email');
+            if (empty($lead_email)) {
+                return new WP_REST_Response(array(
+                    'success' => false,
+                    'message' => 'Lead capture is not configured. Please contact the site administrator.'
+                ), 400);
+            }
 
-        // Honeypot spam check (silent rejection)
-        $honeypot = $request->get_param('honeypot');
-        if (!empty($honeypot)) {
-            // Pretend success but don't send email
+            // Honeypot spam check (silent rejection)
+            $honeypot = $request->get_param('honeypot');
+            if (!empty($honeypot)) {
+                // Pretend success but don't send email
+                return new WP_REST_Response(array(
+                    'success' => true,
+                    'message' => 'Thank you for your inquiry. We will contact you soon.'
+                ), 200);
+            }
+
+            // Validate required fields
+            $firstName = $request->get_param('firstName');
+            $lastName = $request->get_param('lastName');
+            $email = $request->get_param('email');
+            $stockNo = $request->get_param('stockNo');
+            $year = $request->get_param('year');
+            $make = $request->get_param('make');
+            $model = $request->get_param('model');
+
+            if (empty($firstName) || empty($lastName) || empty($email)) {
+                return new WP_REST_Response(array(
+                    'success' => false,
+                    'message' => 'Please fill out all required fields.'
+                ), 400);
+            }
+
+            // Validate email format
+            if (!is_email($email)) {
+                return new WP_REST_Response(array(
+                    'success' => false,
+                    'message' => 'Please enter a valid email address.'
+                ), 400);
+            }
+
+            // Build data array for ADF/XML generation
+            $data = array(
+                'firstName' => $firstName,
+                'lastName' => $lastName,
+                'email' => $email,
+                'phone' => $request->get_param('phone'),
+                'postalCode' => $request->get_param('postalCode'),
+                'comments' => $request->get_param('comments'),
+                'stockNo' => $stockNo,
+                'year' => $year,
+                'make' => $make,
+                'model' => $model,
+                'vin' => $request->get_param('vin'),
+                'condition' => $request->get_param('condition'),
+                'ourPrice' => $request->get_param('ourPrice'),
+                'branch' => $request->get_param('branch')
+            );
+
+            // Generate ADF/XML
+            $adf_xml = $this->generate_adf_xml($data);
+
+            // Prepare email
+            $subject = 'New Lead: ' . $year . ' ' . $make . ' ' . $model;
+            $headers = array(
+                'Content-Type: text/plain; charset=UTF-8',
+                'From: ' . get_bloginfo('name') . ' <wordpress@' . wp_parse_url(home_url(), PHP_URL_HOST) . '>'
+            );
+
+            // Send email
+            $sent = wp_mail($lead_email, $subject, $adf_xml, $headers);
+
+            if (!$sent) {
+                error_log('ARC Lead: wp_mail failed for lead ' . $stockNo);
+                return new WP_REST_Response(array(
+                    'success' => false,
+                    'message' => 'Unable to send message. Please try again.'
+                ), 500);
+            }
+
             return new WP_REST_Response(array(
                 'success' => true,
                 'message' => 'Thank you for your inquiry. We will contact you soon.'
             ), 200);
+
+        } catch (Exception $e) {
+            error_log('ARC Lead Error: ' . $e->getMessage());
+            return new WP_REST_Response(array(
+                'success' => false,
+                'message' => 'An error occurred. Please try again. Error: ' . $e->getMessage()
+            ), 500);
         }
-
-        // Validate required fields
-        $firstName = $request->get_param('firstName');
-        $lastName = $request->get_param('lastName');
-        $email = $request->get_param('email');
-        $stockNo = $request->get_param('stockNo');
-        $year = $request->get_param('year');
-        $make = $request->get_param('make');
-        $model = $request->get_param('model');
-
-        if (empty($firstName) || empty($lastName) || empty($email)) {
-            return new WP_Error(
-                'missing_fields',
-                'Please fill out all required fields.',
-                array('status' => 400)
-            );
-        }
-
-        // Validate email format
-        if (!is_email($email)) {
-            return new WP_Error(
-                'invalid_email',
-                'Please enter a valid email address.',
-                array('status' => 400)
-            );
-        }
-
-        // Build data array for ADF/XML generation
-        $data = array(
-            'firstName' => $firstName,
-            'lastName' => $lastName,
-            'email' => $email,
-            'phone' => $request->get_param('phone'),
-            'postalCode' => $request->get_param('postalCode'),
-            'comments' => $request->get_param('comments'),
-            'stockNo' => $stockNo,
-            'year' => $year,
-            'make' => $make,
-            'model' => $model,
-            'vin' => $request->get_param('vin'),
-            'condition' => $request->get_param('condition'),
-            'ourPrice' => $request->get_param('ourPrice'),
-            'branch' => $request->get_param('branch')
-        );
-
-        // Generate ADF/XML
-        $adf_xml = $this->generate_adf_xml($data);
-
-        // Prepare email
-        $subject = 'New Lead: ' . $year . ' ' . $make . ' ' . $model;
-        $headers = array(
-            'Content-Type: text/plain; charset=UTF-8',
-            'From: ' . get_bloginfo('name') . ' <wordpress@' . wp_parse_url(home_url(), PHP_URL_HOST) . '>'
-        );
-
-        // Send email
-        $sent = wp_mail($lead_email, $subject, $adf_xml, $headers);
-
-        if (!$sent) {
-            return new WP_Error(
-                'email_failed',
-                'Unable to send message. Please try again.',
-                array('status' => 500)
-            );
-        }
-
-        return new WP_REST_Response(array(
-            'success' => true,
-            'message' => 'Thank you for your inquiry. We will contact you soon.'
-        ), 200);
     }
 
     /**
