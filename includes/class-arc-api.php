@@ -179,25 +179,33 @@ class ARC_Inventory_API {
      * Submit lead form
      */
     public function submit_lead($request) {
+        $debug = array();
+
         try {
+            $debug[] = 'Starting submit_lead';
+
             // Check if lead email is configured
             $lead_email = get_option('arc_adf_lead_email');
+            $debug[] = 'Lead email: ' . ($lead_email ? 'configured' : 'not configured');
+
             if (empty($lead_email)) {
                 return new WP_REST_Response(array(
                     'success' => false,
-                    'message' => 'Lead capture is not configured. Please contact the site administrator.'
+                    'message' => 'Lead capture is not configured. Please contact the site administrator.',
+                    'debug' => $debug
                 ), 400);
             }
 
             // Honeypot spam check (silent rejection)
             $honeypot = $request->get_param('honeypot');
             if (!empty($honeypot)) {
-                // Pretend success but don't send email
                 return new WP_REST_Response(array(
                     'success' => true,
                     'message' => 'Thank you for your inquiry. We will contact you soon.'
                 ), 200);
             }
+
+            $debug[] = 'Getting request parameters';
 
             // Validate required fields
             $firstName = $request->get_param('firstName');
@@ -208,10 +216,13 @@ class ARC_Inventory_API {
             $make = $request->get_param('make');
             $model = $request->get_param('model');
 
+            $debug[] = 'Validating fields';
+
             if (empty($firstName) || empty($lastName) || empty($email)) {
                 return new WP_REST_Response(array(
                     'success' => false,
-                    'message' => 'Please fill out all required fields.'
+                    'message' => 'Please fill out all required fields.',
+                    'debug' => $debug
                 ), 400);
             }
 
@@ -219,9 +230,12 @@ class ARC_Inventory_API {
             if (!is_email($email)) {
                 return new WP_REST_Response(array(
                     'success' => false,
-                    'message' => 'Please enter a valid email address.'
+                    'message' => 'Please enter a valid email address.',
+                    'debug' => $debug
                 ), 400);
             }
+
+            $debug[] = 'Building data array';
 
             // Build data array for ADF/XML generation
             $data = array(
@@ -241,8 +255,13 @@ class ARC_Inventory_API {
                 'branch' => $request->get_param('branch')
             );
 
+            $debug[] = 'Generating ADF/XML';
+
             // Generate ADF/XML
             $adf_xml = $this->generate_adf_xml($data);
+
+            $debug[] = 'XML generated, length: ' . strlen($adf_xml);
+            $debug[] = 'Preparing email';
 
             // Prepare email
             $subject = 'New Lead: ' . $year . ' ' . $make . ' ' . $model;
@@ -251,27 +270,45 @@ class ARC_Inventory_API {
                 'From: ' . get_bloginfo('name') . ' <wordpress@' . wp_parse_url(home_url(), PHP_URL_HOST) . '>'
             );
 
+            $debug[] = 'Sending email to: ' . $lead_email;
+
             // Send email
             $sent = wp_mail($lead_email, $subject, $adf_xml, $headers);
+
+            $debug[] = 'wp_mail returned: ' . ($sent ? 'true' : 'false');
 
             if (!$sent) {
                 error_log('ARC Lead: wp_mail failed for lead ' . $stockNo);
                 return new WP_REST_Response(array(
                     'success' => false,
-                    'message' => 'Unable to send message. Please try again.'
+                    'message' => 'wp_mail returned false. Email not sent.',
+                    'debug' => $debug
                 ), 500);
             }
 
             return new WP_REST_Response(array(
                 'success' => true,
-                'message' => 'Thank you for your inquiry. We will contact you soon.'
+                'message' => 'Thank you for your inquiry. We will contact you soon.',
+                'debug' => $debug
             ), 200);
 
         } catch (Exception $e) {
+            $debug[] = 'Exception: ' . $e->getMessage();
+            $debug[] = 'Line: ' . $e->getLine();
+            $debug[] = 'File: ' . $e->getFile();
             error_log('ARC Lead Error: ' . $e->getMessage());
             return new WP_REST_Response(array(
                 'success' => false,
-                'message' => 'An error occurred. Please try again. Error: ' . $e->getMessage()
+                'message' => 'Exception: ' . $e->getMessage(),
+                'debug' => $debug
+            ), 500);
+        } catch (Throwable $e) {
+            $debug[] = 'Fatal error: ' . $e->getMessage();
+            $debug[] = 'Line: ' . $e->getLine();
+            return new WP_REST_Response(array(
+                'success' => false,
+                'message' => 'Fatal error: ' . $e->getMessage(),
+                'debug' => $debug
             ), 500);
         }
     }
