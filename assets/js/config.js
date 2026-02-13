@@ -14,7 +14,6 @@ ARC.config = {
   containerSelector: '#arc-inventory',
   perPage: 0,
   nonce: '',
-  leadNonce: '',
   leadEmailConfigured: false
 };
 
@@ -24,7 +23,6 @@ if (typeof ARC_WP_Config !== 'undefined') {
   ARC.config.leadUrl = ARC_WP_Config.leadUrl;
   ARC.config.perPage = ARC_WP_Config.itemsPerPage;
   ARC.config.nonce = ARC_WP_Config.nonce;
-  ARC.config.leadNonce = ARC_WP_Config.leadNonce;
   ARC.config.leadEmailConfigured = ARC_WP_Config.leadEmailConfigured;
 }
 

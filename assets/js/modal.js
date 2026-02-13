@@ -204,7 +204,6 @@ ARC.modal = {
     // Get form data
     var formData = new FormData(form);
     var data = {
-      nonce: ARC.config.leadNonce,
       firstName: formData.get('firstName'),
       lastName: formData.get('lastName'),
       email: formData.get('email'),
