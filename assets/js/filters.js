@@ -38,9 +38,9 @@ ARC.filters = {
         if (!found) return false;
       }
 
-      // Category filter (uses type field, compared uppercase)
+      // Category filter (uses category field, compared uppercase)
       if (filters.category.length > 0) {
-        var itemTypeUpper = item.type.toUpperCase();
+        var itemTypeUpper = item.category ? item.category.toUpperCase() : '';
         var catFound = false;
         for (var j = 0; j < filters.category.length; j++) {
           if (filters.category[j].toUpperCase() === itemTypeUpper) { catFound = true; break; }
@@ -104,13 +104,13 @@ ARC.filters = {
   },
 
   /**
-   * Extract unique categories (type field) from inventory
+   * Extract unique categories from inventory
    */
   getUniqueCategories: function(inventory) {
     var cats = {};
     inventory.forEach(function(item) {
-      if (item.type) {
-        cats[item.type.toUpperCase()] = item.type;
+      if (item.category) {
+        cats[item.category.toUpperCase()] = item.category;
       }
     });
     return Object.keys(cats).sort().map(function(key) { return cats[key]; });
@@ -167,7 +167,7 @@ ARC.filters = {
         var mk = item.make.toUpperCase();
         counts.make[mk] = (counts.make[mk] || 0) + 1;
       }
-      if (item.type) counts.category[item.type] = (counts.category[item.type] || 0) + 1;
+      if (item.category) counts.category[item.category] = (counts.category[item.category] || 0) + 1;
       if (item.branch) counts.location[item.branch] = (counts.location[item.branch] || 0) + 1;
       if (item.year) counts.year[item.year] = (counts.year[item.year] || 0) + 1;
     });

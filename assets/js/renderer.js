@@ -166,17 +166,23 @@ ARC.renderer = {
     var odometerDisplay = ARC.formatters.odometer(item.odometer);
     if (odometerDisplay) rows.push('<tr><th><strong>Odometer</strong></th><td>' + odometerDisplay + '</td></tr>');
 
-    if (item.engineMfr) {
-      var engineText = esc(item.engineMfr);
-      if (item.horsepower) engineText += ' ' + esc(item.horsepower) + ' HP';
+    if (item.engineMake) {
+      var engineText = esc(item.engineMake);
+      if (item.engineModel) engineText += ' ' + esc(item.engineModel);
+      if (item.horsepower) engineText += ' &mdash; ' + esc(item.horsepower) + ' HP';
       rows.push('<tr><th><strong>Engine</strong></th><td>' + engineText + '</td></tr>');
     }
 
+    if (item.transMake) {
+      var transText = esc(item.transMake);
+      if (item.transModel) transText += ' ' + esc(item.transModel);
+      rows.push('<tr><th><strong>Transmission</strong></th><td>' + transText + '</td></tr>');
+    }
+
+    if (item.axleConfig) rows.push('<tr><th><strong>Axle</strong></th><td>' + esc(item.axleConfig) + '</td></tr>');
+
     var gvwrDisplay = ARC.formatters.gvwr(item.gvwr);
     if (gvwrDisplay) rows.push('<tr><th><strong>GVWR</strong></th><td>' + gvwrDisplay + '</td></tr>');
-
-    if (item.wheelbase) rows.push('<tr><th><strong>Wheelbase</strong></th><td>' + esc(item.wheelbase) + '"</td></tr>');
-    if (item.suspension) rows.push('<tr><th><strong>Suspension</strong></th><td>' + esc(item.suspension) + '</td></tr>');
 
     var detailsHtml = rows.length > 0 ?
       '<table class="arc-card-details"><tbody>' + rows.join('') + '</tbody></table>' : '';
@@ -208,7 +214,7 @@ ARC.renderer = {
 
     if (item.color) tags.push('<span class="arc-spec-tag arc-spec-tag--color">' + esc(item.color) + '</span>');
     if (item.fuelType) tags.push('<span class="arc-spec-tag arc-spec-tag--fuel">' + esc(item.fuelType) + '</span>');
-    if (item.type) tags.push('<span class="arc-spec-tag arc-spec-tag--type">' + esc(item.type) + '</span>');
+    if (item.category) tags.push('<span class="arc-spec-tag arc-spec-tag--type">' + esc(item.category) + '</span>');
 
     if (tags.length === 0) return '';
 
@@ -230,31 +236,105 @@ ARC.renderer = {
     var imageIndex = ARC.state.imageIndices[item.stockNo] || 0;
     var esc = ARC.formatters.escapeHtml;
 
-    // Build specs table rows - only include fields with data
+    // Helper: standard data row
+    var row = function(label, val) {
+      return '<tr><th><strong>' + esc(label) + '</strong></th><td>' + esc(String(val)) + '</td></tr>';
+    };
+    // Helper: section heading row (spans both columns)
+    var section = function(title) {
+      return '<tr class="arc-specs-section"><th colspan="2">' + esc(title) + '</th></tr>';
+    };
+
     var rows = [];
 
-    if (item.stockNo) rows.push('<tr><th><strong>Stock #</strong></th><td>' + esc(item.stockNo) + '</td></tr>');
-    if (item.vin) rows.push('<tr><th><strong>VIN</strong></th><td>' + esc(item.vin) + '</td></tr>');
-    if (item.condition) rows.push('<tr><th><strong>Condition</strong></th><td>' + esc(item.condition) + '</td></tr>');
-    if (item.type) rows.push('<tr><th><strong>Type</strong></th><td>' + esc(item.type) + '</td></tr>');
+    // --- Overview ---
+    var overviewRows = [];
+    if (item.stockNo) overviewRows.push(row('Stock #', item.stockNo));
+    if (item.vin) overviewRows.push(row('VIN', item.vin));
+    var odom = ARC.formatters.odometer(item.odometer);
+    if (odom) overviewRows.push(row('Odometer', odom));
+    if (item.color) overviewRows.push(row('Exterior Color', item.color));
+    if (item.interior) overviewRows.push(row('Interior', item.interior));
+    if (item.class) overviewRows.push(row('Trim Level', item.class));
+    if (item.branch) overviewRows.push(row('Location', item.branch));
+    if (overviewRows.length) { rows.push(section('Overview')); rows = rows.concat(overviewRows); }
 
-    var odometerDisplay = ARC.formatters.odometer(item.odometer);
-    if (odometerDisplay) rows.push('<tr><th><strong>Odometer</strong></th><td>' + odometerDisplay + '</td></tr>');
+    // --- Engine ---
+    var engineRows = [];
+    if (item.engineMake || item.engineModel) {
+      engineRows.push(row('Engine', [item.engineMake, item.engineModel].filter(Boolean).join(' ')));
+    }
+    if (item.horsepower) engineRows.push(row('Horsepower', item.horsepower + ' HP'));
+    if (item.engineBrake) engineRows.push(row('Engine Brake', item.engineBrake));
+    if (item.fuelType) engineRows.push(row('Fuel Type', item.fuelType));
+    if (item.engineSerial) engineRows.push(row('Engine Serial', item.engineSerial));
+    if (engineRows.length) { rows.push(section('Engine')); rows = rows.concat(engineRows); }
 
-    if (item.engineMfr) rows.push('<tr><th><strong>Engine</strong></th><td>' + esc(item.engineMfr) + '</td></tr>');
-    if (item.horsepower) rows.push('<tr><th><strong>Horsepower</strong></th><td>' + esc(item.horsepower) + ' HP</td></tr>');
-    if (item.fuelType) rows.push('<tr><th><strong>Fuel Type</strong></th><td>' + esc(item.fuelType) + '</td></tr>');
+    // --- Transmission ---
+    var transRows = [];
+    if (item.transMake || item.transModel) {
+      transRows.push(row('Transmission', [item.transMake, item.transModel].filter(Boolean).join(' ')));
+    }
+    if (item.transSpeed) transRows.push(row('Speeds', item.transSpeed));
+    if (item.transmission) transRows.push(row('Type', item.transmission));
+    if (item.drive) transRows.push(row('Drive', item.drive));
+    if (transRows.length) { rows.push(section('Transmission')); rows = rows.concat(transRows); }
 
-    var gvwrDisplay = ARC.formatters.gvwr(item.gvwr);
-    if (gvwrDisplay) rows.push('<tr><th><strong>GVWR</strong></th><td>' + gvwrDisplay + '</td></tr>');
+    // --- Axle & Suspension ---
+    var axleRows = [];
+    if (item.axleConfig) axleRows.push(row('Axle Configuration', item.axleConfig));
+    var faStr = ARC.formatters.gvwr(item.faCapacity);
+    if (faStr) axleRows.push(row('Front Axle Capacity', faStr));
+    var raStr = ARC.formatters.gvwr(item.raCapacity);
+    if (raStr) axleRows.push(row('Rear Axle Capacity', raStr));
+    if (item.rearEndRatio) axleRows.push(row('Rear End Ratio', item.rearEndRatio));
+    if (item.fifthWheel) axleRows.push(row('5th Wheel', item.fifthWheel));
+    if (item.suspensionType) {
+      var suspStr = item.suspensionType;
+      if (item.suspensionMake) suspStr += ' \u2013 ' + item.suspensionMake;
+      if (item.suspensionModel) suspStr += ' ' + item.suspensionModel;
+      axleRows.push(row('Suspension', suspStr));
+    }
+    if (axleRows.length) { rows.push(section('Axle & Suspension')); rows = rows.concat(axleRows); }
 
-    if (item.wheelbase) rows.push('<tr><th><strong>Wheelbase</strong></th><td>' + esc(item.wheelbase) + '"</td></tr>');
-    if (item.suspension) rows.push('<tr><th><strong>Suspension</strong></th><td>' + esc(item.suspension) + '</td></tr>');
-    if (item.color) rows.push('<tr><th><strong>Color</strong></th><td>' + esc(item.color) + '</td></tr>');
-    if (item.bodyStyle) rows.push('<tr><th><strong>Body Style</strong></th><td>' + esc(item.bodyStyle) + '</td></tr>');
-    if (item.branch) rows.push('<tr><th><strong>Location</strong></th><td>' + esc(item.branch) + '</td></tr>');
+    // --- Tires & Wheels ---
+    var tireRows = [];
+    if (item.frontTireSize || item.frontWheels) {
+      tireRows.push(row('Front Tires', [item.frontTireSize, item.frontWheels].filter(Boolean).join(' \u2013 ')));
+    }
+    if (item.rearTireSize || item.rearWheels) {
+      tireRows.push(row('Rear Tires', [item.rearTireSize, item.rearWheels].filter(Boolean).join(' \u2013 ')));
+    }
+    if (item.brakes) tireRows.push(row('Brakes', item.brakes));
+    if (tireRows.length) { rows.push(section('Tires & Wheels')); rows = rows.concat(tireRows); }
+
+    // --- Dimensions & Weight ---
+    var dimRows = [];
+    var gvwrStr = ARC.formatters.gvwr(item.gvwr);
+    if (gvwrStr) dimRows.push(row('GVWR', gvwrStr));
+    if (item.wheelbase) dimRows.push(row('Wheelbase', item.wheelbase + '"'));
+    var tanks = '';
+    if (item.tank1Capacity) tanks = item.tank1Capacity + ' gal';
+    if (item.tank2Capacity) tanks += (tanks ? ' + ' : '') + item.tank2Capacity + ' gal';
+    if (tanks) dimRows.push(row('Fuel Capacity', tanks));
+    if (dimRows.length) { rows.push(section('Dimensions & Weight')); rows = rows.concat(dimRows); }
+
+    // --- Cab (only if any data present) ---
+    var cabRows = [];
+    if (item.cabType) cabRows.push(row('Cab Type', item.cabType));
+    if (item.sleeper) cabRows.push(row('Sleeper', item.sleeper));
+    if (item.sleeperSize) cabRows.push(row('Sleeper Size', item.sleeperSize + '"'));
+    if (item.numberOfBeds && item.numberOfBeds !== '0') cabRows.push(row('Beds', item.numberOfBeds));
+    if (cabRows.length) { rows.push(section('Cab')); rows = rows.concat(cabRows); }
 
     var galleryHtml = ARC.gallery.render(item, imageIndex);
+
+    var descriptionHtml = '';
+    if (item.description) {
+      descriptionHtml = '<div class="arc-detail-description">' +
+        '<p class="arc-detail-description-text">' + esc(item.description) + '</p>' +
+      '</div>';
+    }
 
     return '' +
     '<div class="arc-detail">' +
@@ -281,6 +361,7 @@ ARC.renderer = {
             '<table class="arc-detail-specs">' +
               '<tbody>' + rows.join('') + '</tbody>' +
             '</table>' +
+            descriptionHtml +
           '</div>' +
         '</div>' +
       '</div>' +

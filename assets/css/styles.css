@@ -722,3 +722,36 @@
 .arc-detail-specs td {
   color: inherit;
 }
+
+.arc-detail-specs tr.arc-specs-section th {
+  width: auto;
+  opacity: 0.45;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding-top: 1.5rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.arc-detail-specs tr.arc-specs-section:first-child th {
+  padding-top: 0;
+}
+
+/**
+ * Detail Description Block
+ */
+.arc-detail-description {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.arc-detail-description-text {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  margin: 0;
+  white-space: pre-line;
+  color: inherit;
+  opacity: 0.75;
+}
