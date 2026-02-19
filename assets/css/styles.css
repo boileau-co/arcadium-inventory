@@ -480,10 +480,11 @@
 /**
  * Card Details Table
  */
-.arc-card-details {
+.arc-inventory .arc-card-details {
   margin-top: auto;
   width: 100%;
   border-collapse: collapse;
+  border: none !important;
 }
 
 .arc-inventory .arc-card-details th,
@@ -493,13 +494,13 @@
   padding-right: 0;
   font-size: 0.8125rem;
   text-align: left;
-  border: none;
-  border-bottom: 1px solid #e5e7eb;
+  border: none !important;
+  border-bottom: 1px solid #e5e7eb !important;
 }
 
 .arc-inventory .arc-card-details tr:last-child th,
 .arc-inventory .arc-card-details tr:last-child td {
-  border-bottom: none;
+  border-bottom: none !important;
 }
 
 .arc-inventory .arc-card-details th {
@@ -692,9 +693,10 @@
   opacity: 0.9;
 }
 
-.arc-detail-specs {
+.arc-inventory .arc-detail-specs {
   width: 100%;
   border-collapse: collapse;
+  border: none !important;
 }
 
 .arc-inventory .arc-detail-specs th,
@@ -704,8 +706,8 @@
   padding-right: 0;
   text-align: left;
   font-size: 0.875rem;
-  border: none;
-  border-bottom: 1px solid #e5e7eb;
+  border: none !important;
+  border-bottom: 1px solid #e5e7eb !important;
 }
 
 .arc-inventory .arc-detail-specs th {
