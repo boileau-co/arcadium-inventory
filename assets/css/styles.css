@@ -699,8 +699,8 @@
   border-collapse: collapse;
 }
 
-.arc-detail-specs th,
-.arc-detail-specs td {
+.arc-inventory .arc-detail-specs th,
+.arc-inventory .arc-detail-specs td {
   padding: 0.5rem 0;
   padding-left: 0;
   padding-right: 0;
@@ -712,18 +712,18 @@
   border-bottom: 1px solid #e5e7eb;
 }
 
-.arc-detail-specs th {
+.arc-inventory .arc-detail-specs th {
   width: 40%;
   color: inherit;
   opacity: 0.6;
   /* font-weight removed - will use <strong> tag in HTML */
 }
 
-.arc-detail-specs td {
+.arc-inventory .arc-detail-specs td {
   color: inherit;
 }
 
-.arc-detail-specs tr.arc-specs-section th {
+.arc-inventory .arc-detail-specs tr.arc-specs-section th {
   width: auto;
   opacity: 0.45;
   font-size: 0.6875rem;
@@ -734,7 +734,7 @@
   border-bottom: 1px solid #e5e7eb;
 }
 
-.arc-detail-specs tr.arc-specs-section:first-child th {
+.arc-inventory .arc-detail-specs tr.arc-specs-section:first-child th {
   padding-top: 0;
 }
 
