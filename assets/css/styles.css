@@ -11,7 +11,7 @@
   --arc-container-padding: 1rem;
   --arc-grid-gap: 1.25rem;
   --arc-card-padding: 1rem;
-  --arc-gallery-height: 200px;
+  --arc-gallery-height: 250px;
   --arc-border-radius: 4px;
   --arc-sidebar-width: 240px;
 
@@ -486,32 +486,30 @@
   border-collapse: collapse;
 }
 
-.arc-card-details th,
-.arc-card-details td {
+.arc-inventory .arc-card-details th,
+.arc-inventory .arc-card-details td {
   padding: 0.375rem 0;
   padding-left: 0;
   padding-right: 0;
   font-size: 0.8125rem;
   text-align: left;
-  border-left: 0;
-  border-right: 0;
-  border-top: 0;
+  border: none;
   border-bottom: 1px solid #e5e7eb;
 }
 
-.arc-card-details tr:last-child th,
-.arc-card-details tr:last-child td {
+.arc-inventory .arc-card-details tr:last-child th,
+.arc-inventory .arc-card-details tr:last-child td {
   border-bottom: none;
 }
 
-.arc-card-details th {
+.arc-inventory .arc-card-details th {
   color: inherit;
   opacity: 0.6;
   width: 40%;
   /* font-weight removed - will use <strong> tag in HTML */
 }
 
-.arc-card-details td {
+.arc-inventory .arc-card-details td {
   color: inherit;
 }
 
@@ -706,9 +704,7 @@
   padding-right: 0;
   text-align: left;
   font-size: 0.875rem;
-  border-left: 0;
-  border-right: 0;
-  border-top: 0;
+  border: none;
   border-bottom: 1px solid #e5e7eb;
 }
 
