@@ -192,9 +192,8 @@ ARC.renderer = {
       ARC.gallery.render(item, imageIndex) +
       '<div class="arc-card-body">' +
         '<a href="' + detailUrl + '" class="arc-card-title-link" data-action="view-detail" data-stock="' + item.stockNo + '">' +
-          '<h3 class="arc-card-title">' + esc(item.year) + ' ' + esc(item.make) + '</h3>' +
+          '<h3 class="arc-card-title">' + esc(item.year) + ' ' + esc(item.make) + (item.model ? ' ' + esc(item.model) : '') + '</h3>' +
         '</a>' +
-        '<p class="arc-card-model">' + esc(item.model) + '</p>' +
         ARC.renderer.specs(item) +
         detailsHtml +
         '<div class="arc-card-buttons">' +
