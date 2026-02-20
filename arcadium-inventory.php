@@ -5,7 +5,7 @@
  * Description: A modular JavaScript application for displaying vehicle inventory with XML feed integration and advanced filtering.
  * Version: 1.7.5
  * Author: Boileau & Co.
- * Author URI: https://boileauandco.com
+ * Author URI: https://boileau.co
  * Text Domain: arcadium-inventory
  * Domain Path: /languages
  * Requires at least: 5.8
