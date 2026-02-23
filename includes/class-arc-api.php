@@ -68,23 +68,35 @@ class ARC_Inventory_API {
             );
         }
 
-        // Fetch XML data
-        $response = wp_remote_get($xml_url, array(
-            'timeout' => 30,
-            'sslverify' => true
-        ));
-
-        if (is_wp_error($response)) {
-            return new WP_Error(
-                'fetch_failed',
-                'Failed to fetch XML feed: ' . $response->get_error_message(),
-                array('status' => 500)
-            );
+        // Resolve URL to local filesystem path if possible, to avoid loopback HTTP requests
+        $body = false;
+        $upload_dir = wp_upload_dir();
+        if ( ! empty($upload_dir['baseurl']) && strpos($xml_url, $upload_dir['baseurl']) === 0 ) {
+            $local_path = str_replace($upload_dir['baseurl'], $upload_dir['basedir'], $xml_url);
+            if ( file_exists($local_path) ) {
+                $body = file_get_contents($local_path);
+            }
         }
 
-        $body = wp_remote_retrieve_body($response);
+        // Fall back to HTTP request for remote feeds or if local resolution failed
+        if ( $body === false ) {
+            $response = wp_remote_get($xml_url, array(
+                'timeout' => 30,
+                'sslverify' => true
+            ));
 
-        if (empty($body)) {
+            if ( is_wp_error($response) ) {
+                return new WP_Error(
+                    'fetch_failed',
+                    'Failed to fetch XML feed: ' . $response->get_error_message(),
+                    array('status' => 500)
+                );
+            }
+
+            $body = wp_remote_retrieve_body($response);
+        }
+
+        if ( empty($body) ) {
             return new WP_Error(
                 'empty_response',
                 'XML feed returned empty response.',
