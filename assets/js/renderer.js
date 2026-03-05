@@ -161,6 +161,8 @@ ARC.renderer = {
     // Build details table rows - only include items with data
     var rows = [];
 
+    rows.push('<tr><th><strong>Price</strong></th><td>' + ARC.formatters.price(item.ourPrice) + '</td></tr>');
+
     if (item.branch) rows.push('<tr><th><strong>Location</strong></th><td>' + esc(item.branch) + '</td></tr>');
 
     var odometerDisplay = ARC.formatters.odometer(item.odometer);

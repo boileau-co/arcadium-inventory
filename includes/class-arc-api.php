@@ -118,6 +118,18 @@ class ARC_Inventory_API {
     }
 
     /**
+     * Translate short category codes to human-readable labels
+     */
+    private function translate_category($raw) {
+        $map = array(
+            'TRK' => 'Truck',
+            'TLR' => 'Trailer',
+        );
+        $key = strtoupper(trim($raw));
+        return isset($map[$key]) ? $map[$key] : $raw;
+    }
+
+    /**
      * Parse XML data
      */
     private function parse_xml($xml_string) {
@@ -148,7 +160,7 @@ class ARC_Inventory_API {
                 'vin'             => (string) $item->VIN,
                 'condition'       => (string) $item->Condition,
                 'ourPrice'        => (string) $item->Price,
-                'category'        => (string) $item->Category,
+                'category'        => $this->translate_category((string) $item->Category),
                 'branch'          => (string) $item->Branch,
                 'color'           => (string) $item->Color,
                 'interior'        => (string) $item->Interior,
