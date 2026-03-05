@@ -423,7 +423,6 @@ class ARC_Inventory_API {
         $xml .= '    <provider>' . "\n";
         $xml .= '      <name>' . esc_html($site_name) . '</name>' . "\n";
         $xml .= '      <service>Website</service>' . "\n";
-        $xml .= '      <url>' . esc_html($site_url) . '</url>' . "\n";
         $xml .= '    </provider>' . "\n";
         $xml .= '    <leadtype>Sales</leadtype>' . "\n";
         $xml .= '  </prospect>' . "\n";
