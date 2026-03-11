@@ -18,7 +18,8 @@ ARC.filters = {
         var matchesSearch =
           item.stockNo.toLowerCase().indexOf(searchLower) !== -1 ||
           item.make.toLowerCase().indexOf(searchLower) !== -1 ||
-          item.model.toLowerCase().indexOf(searchLower) !== -1;
+          item.model.toLowerCase().indexOf(searchLower) !== -1 ||
+          (item.description && item.description.toLowerCase().indexOf(searchLower) !== -1);
 
         if (!matchesSearch) return false;
       }
