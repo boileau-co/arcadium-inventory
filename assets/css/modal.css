@@ -205,16 +205,17 @@ body.arc-modal-open {
 }
 
 .arc-btn--primary {
-  background: #ff7144;
-  color: #fff;
+  background: var(--arc-button-bg);
+  color: var(--arc-button-color);
+  border: 1px solid var(--arc-button-border);
 }
 
 .arc-btn--primary:hover {
-  background: #ff5722;
+  opacity: 0.9;
 }
 
 .arc-btn--primary:active {
-  background: #e64a19;
+  opacity: 0.8;
 }
 
 .arc-btn--primary:disabled {
