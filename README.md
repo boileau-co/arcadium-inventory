@@ -144,4 +144,4 @@ arcadium-inventory/
 
 ## License
 
-GPL v2 or later.
+Proprietary. Copyright &copy; Boileau & Co. All rights reserved.
